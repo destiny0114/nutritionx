@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+	background-color: #989cff;
+	width: 100vw;
+	height: 100vh;
+	margin: 0;
+	overflow: hidden;
+	box-sizing: content-box;
+}
+
+.recharts-legend-item-text {
+	margin-left: 5px !important;
+	margin-right: 10px !important;
+}
+
+@layer base {
+	.selected > svg {
+		@apply bg-purple-400 rounded-full shadow-md;
+	}
+
+	.selected > svg > path {
+		@apply fill-current text-white;
+	}
+
+	.break-word {
+		word-spacing: 100vw;
+		@apply table-caption;
+	}
+}

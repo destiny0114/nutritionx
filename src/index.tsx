@@ -9,10 +9,31 @@
  * MIT License
  * Copyright (c) 2021 Keena Levine
  */
+import "./index.css";
 import ReactDOM from "react-dom";
+import {BrowserRouter as Router, Switch, Route, Redirect} from "react-router-dom";
+
+/* routes */
+import routes from "./routes";
+
+/* components */
+import Navigation from "./components/Navigation";
 
 const App: React.FC = () => {
-	return <div>Hello World</div>;
+	return (
+		<div className="app absolute inset-0 flex max-h-full max-w-full m-5 space-x-10">
+			<Router>
+				<Navigation />
+
+				<Switch>
+					{routes.map((entry, index) => {
+						return <Route key={index} {...entry} />;
+					})}
+					<Redirect to="/overview" />
+				</Switch>
+			</Router>
+		</div>
+	);
 };
 
 ReactDOM.render(<App />, document.getElementById("root"));
