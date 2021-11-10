@@ -9,10 +9,11 @@
  * MIT License
  * Copyright (c) 2021 Keena Levine
  */
-import {classNames} from "../utils";
+/* util */
+import {classNames} from "../../utils";
 
 interface ButtonProps {
-	icon?: React.ReactElement;
+	icon?: React.ReactNode;
 	text: string;
 	onClick?: React.MouseEventHandler<HTMLButtonElement>;
 	className?: string;

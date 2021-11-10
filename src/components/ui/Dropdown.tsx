@@ -13,7 +13,7 @@
 import Button from "./Button";
 
 interface DropdownProps {
-	icon?: React.ReactElement;
+	icon?: React.ReactNode;
 	isOpen: boolean;
 	toggleList: () => void;
 }
