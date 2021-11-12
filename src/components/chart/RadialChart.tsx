@@ -11,7 +11,7 @@
  */
 import {ResponsiveContainer, RadialBarChart, RadialBar, PolarAngleAxis, PolarAngleAxisProps} from "recharts";
 import {CategoricalChartProps} from "recharts/types/chart/generateCategoricalChart";
-import {Props} from "recharts/types/polar/RadialBar";
+import {Props as RadialBarProps} from "recharts/types/polar/RadialBar";
 
 interface RadialChartProps {
 	data: any;
@@ -20,7 +20,7 @@ interface RadialChartProps {
 const RadialChart: React.FC<RadialChartProps> = ({data}) => {
 	let radialBarChartProps: CategoricalChartProps;
 	let polarAngleAxisProps: Omit<PolarAngleAxisProps, "ref">;
-	let radialBarProps: Omit<Props, "ref">;
+	let radialBarProps: Omit<RadialBarProps, "ref">;
 	radialBarChartProps = {
 		data: data,
 		innerRadius: "72%",

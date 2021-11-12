@@ -10,7 +10,7 @@
  * Copyright (c) 2021 Keena Levine
  */
 import {Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, TooltipProps, XAxis, XAxisProps, YAxis, YAxisProps} from "recharts";
-import {Props} from "recharts/types/cartesian/Bar";
+import {Props as BarProps} from "recharts/types/cartesian/Bar";
 import {CategoricalChartProps} from "recharts/types/chart/generateCategoricalChart";
 /* hook */
 import {useHover} from "../../hook/useHover";
@@ -49,7 +49,7 @@ const StackedBarChart: React.FC<StackBarChartProps> = ({data}) => {
 	let barChartProps: CategoricalChartProps;
 	let xAxisProps: XAxisProps;
 	let yAxisProps: YAxisProps;
-	let stackBarProps: Omit<Props, "ref">[];
+	let stackBarProps: Omit<BarProps, "ref">[];
 
 	barChartProps = {
 		data: data,

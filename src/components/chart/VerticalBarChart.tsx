@@ -11,7 +11,8 @@
  */
 import {Bar, BarChart, LabelList, LabelProps, ResponsiveContainer, XAxis, XAxisProps, YAxis, YAxisProps} from "recharts";
 import {CategoricalChartProps} from "recharts/types/chart/generateCategoricalChart";
-import {Props} from "recharts/types/cartesian/Bar";
+import {Props as BarProps} from "recharts/types/cartesian/Bar";
+import {Props as RectangleProps} from "recharts/types/shape/Rectangle";
 
 interface VerticalBarChartProps {
 	data: any[];
@@ -25,6 +26,7 @@ const calculateHeight = (y: number, height: number) => y - height;
 
 const CustomizedLabel: React.FC<CustomLabelListProps> = (props) => {
 	const {name, y, height, value} = props;
+	console.log(props);
 
 	return (
 		<g transform="translate(0, 0)">
@@ -38,11 +40,17 @@ const CustomizedLabel: React.FC<CustomLabelListProps> = (props) => {
 	);
 };
 
+const CustomizedBackground: React.FC<RectangleProps> = (props) => {
+	const {width, height, x, y} = props;
+
+	return <rect width={width} height={height} x={x} y={y} rx={5} ry={5} opacity={0.8} fill="white" />;
+};
+
 const VerticalBarChart: React.FC<VerticalBarChartProps> = ({data}) => {
 	let barChartProps: CategoricalChartProps;
 	let xAxisProps: XAxisProps;
 	let yAxisProps: YAxisProps;
-	let verticalBarProps: Omit<Props, "ref">[];
+	let verticalBarProps: Omit<BarProps, "ref">[];
 
 	barChartProps = {
 		data: data,
@@ -71,7 +79,7 @@ const VerticalBarChart: React.FC<VerticalBarChartProps> = ({data}) => {
 			dataKey: "nutritions.calories",
 			fill: "url(#calories-v-gradient)",
 			radius: 25,
-			background: <rect rx={5} ry={5} opacity={0.5} />,
+			background: <CustomizedBackground />,
 			children: <LabelList dataKey="nutritions.calories" content={<CustomizedLabel name="Calories" />} />,
 		},
 		{
@@ -79,7 +87,7 @@ const VerticalBarChart: React.FC<VerticalBarChartProps> = ({data}) => {
 			dataKey: "nutritions.carbs",
 			fill: "url(#carbs-v-gradient)",
 			radius: 25,
-			background: <rect rx={5} ry={5} opacity={0.5} />,
+			background: <CustomizedBackground />,
 			children: <LabelList dataKey="nutritions.carbs" content={<CustomizedLabel name="Carbs" />} />,
 		},
 		{
@@ -87,7 +95,7 @@ const VerticalBarChart: React.FC<VerticalBarChartProps> = ({data}) => {
 			dataKey: "nutritions.proteins",
 			fill: "url(#proteins-v-gradient)",
 			radius: 25,
-			background: <rect rx={5} ry={5} opacity={0.5} />,
+			background: <CustomizedBackground />,
 			children: <LabelList dataKey="nutritions.proteins" content={<CustomizedLabel name="Proteins" />} />,
 		},
 		{
@@ -95,7 +103,7 @@ const VerticalBarChart: React.FC<VerticalBarChartProps> = ({data}) => {
 			dataKey: "nutritions.fats",
 			fill: "url(#fats-v-gradient)",
 			radius: 25,
-			background: <rect rx={5} ry={5} opacity={0.5} />,
+			background: <CustomizedBackground />,
 			children: <LabelList dataKey="nutritions.fats" content={<CustomizedLabel name="Fats" />} />,
 		},
 	];
