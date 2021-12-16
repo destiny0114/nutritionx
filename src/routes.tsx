@@ -10,6 +10,7 @@
  * Copyright (c) 2021 Keena Levine
  */
 import Overview from "./views//Overview";
+import Calendar from "./views/Calendar";
 
 interface Route {
 	path: string;
@@ -50,7 +51,7 @@ const routes: Route[] = [
 	{
 		path: "/dashboard",
 		exact: true,
-		children: () => <Dashboard />,
+		children: () => <Calendar />,
 	},
 	{
 		path: "/s",

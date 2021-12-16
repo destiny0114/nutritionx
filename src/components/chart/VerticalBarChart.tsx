@@ -47,12 +47,7 @@ const CustomizedBackground: React.FC<RectangleProps> = (props) => {
 };
 
 const VerticalBarChart: React.FC<VerticalBarChartProps> = ({data}) => {
-	let barChartProps: CategoricalChartProps;
-	let xAxisProps: XAxisProps;
-	let yAxisProps: YAxisProps;
-	let verticalBarProps: Omit<BarProps, "ref">[];
-
-	barChartProps = {
+	const barChartProps: CategoricalChartProps = {
 		data: data,
 		layout: "vertical",
 		barSize: 8,
@@ -62,18 +57,18 @@ const VerticalBarChart: React.FC<VerticalBarChartProps> = ({data}) => {
 		},
 	};
 
-	xAxisProps = {
+	const xAxisProps: XAxisProps = {
 		type: "number",
 		hide: true,
 	};
 
-	yAxisProps = {
+	const yAxisProps: YAxisProps = {
 		type: "category",
 		dataKey: "nutritions",
 		hide: true,
 	};
 
-	verticalBarProps = [
+	const verticalBarProps: Omit<BarProps, "ref">[] = [
 		{
 			name: "Calories",
 			dataKey: "nutritions.calories",

@@ -18,10 +18,7 @@ interface RadialChartProps {
 }
 
 const RadialChart: React.FC<RadialChartProps> = ({data}) => {
-	let radialBarChartProps: CategoricalChartProps;
-	let polarAngleAxisProps: Omit<PolarAngleAxisProps, "ref">;
-	let radialBarProps: Omit<RadialBarProps, "ref">;
-	radialBarChartProps = {
+	const radialBarChartProps: CategoricalChartProps = {
 		data: data,
 		innerRadius: "72%",
 		outerRadius: "85%",
@@ -29,14 +26,14 @@ const RadialChart: React.FC<RadialChartProps> = ({data}) => {
 		endAngle: -50,
 	};
 
-	polarAngleAxisProps = {
+	const polarAngleAxisProps: Omit<PolarAngleAxisProps, "ref"> = {
 		type: "number",
 		domain: [0, 2000],
 		angleAxisId: 0,
 		tick: false,
 	};
 
-	radialBarProps = {
+	const radialBarProps: Omit<RadialBarProps, "ref"> = {
 		fill: "url(#total-calories-gradient)",
 		cornerRadius: 50,
 		background: {opacity: 0.5},

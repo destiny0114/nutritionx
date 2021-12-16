@@ -105,7 +105,7 @@ const useDebounce = <T extends {}>(value: T, delay: number): T => {
 	return debounceValue;
 };
 
-const Overview: React.FC = () => {
+const Overview: React.FC<{}> = () => {
 	useEffect(() => {
 		calculateCalories(dummyData[0].nutritions);
 	}, []);
