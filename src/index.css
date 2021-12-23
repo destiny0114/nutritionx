@@ -6,14 +6,67 @@ body {
 	background-color: #989cff;
 	width: 100vw;
 	height: 100vh;
+	height: 100%;
 	margin: 0;
 	overflow: hidden;
 	box-sizing: content-box;
 }
 
+::-webkit-scrollbar {
+	background-color: transparent !important;
+	width: 7px !important;
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: #4c455885 !important;
+	border-radius: 50px !important;
+}
+
 .recharts-legend-item-text {
 	margin-left: 5px !important;
 	margin-right: 10px !important;
+}
+
+.fc {
+	color: #ffffff !important;
+	font-family: "Poppins", sans-serif !important;
+}
+
+.fc-day-today {
+	background: linear-gradient(45deg, #ff4ead 0%, #f79cff 100%) !important;
+}
+
+.day-select {
+	background-color: #65b5e3;
+}
+
+#food-record-container thead tr,
+#food-record-container tbody tr {
+	display: table;
+	table-layout: fixed;
+}
+
+#food-record-container thead tr {
+	width: calc(100% - 1.6em);
+}
+
+#food-record-container tbody tr {
+	width: calc(100% - 0.5em);
+}
+
+#food-record-container thead th,
+#food-record-container tbody td {
+	padding: 0.5rem;
+}
+
+#food-record-container thead th:first-child,
+#food-record-container tbody td:first-child {
+	width: 50%;
+}
+
+#food-record-container tbody tr:nth-child(odd) {
+	background-color: #4b4e8f;
+	border-radius: 10px;
 }
 
 @layer base {

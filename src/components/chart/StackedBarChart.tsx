@@ -10,7 +10,7 @@
  * Copyright (c) 2021 Keena Levine
  */
 import {Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, TooltipProps, XAxis, XAxisProps, YAxis, YAxisProps} from "recharts";
-import {Props} from "recharts/types/cartesian/Bar";
+import {Props as BarProps} from "recharts/types/cartesian/Bar";
 import {CategoricalChartProps} from "recharts/types/chart/generateCategoricalChart";
 /* hook */
 import {useHover} from "../../hook/useHover";
@@ -46,12 +46,8 @@ const CustomizedToolTip: React.FC<CustomToolTipProps> = ({active, payload, label
 
 const StackedBarChart: React.FC<StackBarChartProps> = ({data}) => {
 	const [focus, eventHandlers] = useHover();
-	let barChartProps: CategoricalChartProps;
-	let xAxisProps: XAxisProps;
-	let yAxisProps: YAxisProps;
-	let stackBarProps: Omit<Props, "ref">[];
 
-	barChartProps = {
+	const barChartProps: CategoricalChartProps = {
 		data: data,
 		layout: "horizontal",
 		barSize: 12,
@@ -61,18 +57,18 @@ const StackedBarChart: React.FC<StackBarChartProps> = ({data}) => {
 		},
 	};
 
-	xAxisProps = {
+	const xAxisProps: XAxisProps = {
 		axisLine: {stroke: "#ffffff"},
 		dataKey: "date",
 		tick: {fill: "#ffffff", fontFamily: "Poppins"},
 	};
 
-	yAxisProps = {
+	const yAxisProps: YAxisProps = {
 		axisLine: false,
 		tick: {fill: "#ffffff", fontFamily: "Poppins"},
 	};
 
-	stackBarProps = [
+	const stackBarProps: Omit<BarProps, "ref">[] = [
 		{
 			name: "Carbs",
 			dataKey: "nutritions.carbs",

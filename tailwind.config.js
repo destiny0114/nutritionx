@@ -6,6 +6,7 @@ module.exports = {
 			colors: {
 				"lavender": "#e4dfff",
 				"medium-slate-blue": "#7165e3",
+				"light-purple": "#FBF9FF",
 				"liberty": "#4e4c9c",
 				"russian-violet": "#2f2850",
 				"naples-yellow": "#fada63",
