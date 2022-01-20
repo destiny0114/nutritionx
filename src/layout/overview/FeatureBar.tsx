@@ -22,12 +22,16 @@ const FeatureBar: React.FC<{}> = () => {
 
 	return (
 		<div className="flex items-start justify-between">
-			<h1 className="font-poppins text-3xl text-white self-center">Analytics Overview</h1>
+			<h1 className="font-poppins text-3xl 2xl:text-5xl text-white self-center">Analytics Overview</h1>
 			<div className="relative inline-flex items-center space-x-10 w-auto h-auto">
-				<Button className="add-btn bg-medium-slate-blue hover:bg-purple-500 py-3 px-6 inline-flex" icon={<AddIcon className="mr-3 w-5 h-5" />} text="Add Food" />
-				<Dropdown icon={<DropdownIcon className="mr-3 w-4 h-4" />} isOpen={open} toggleList={() => setOpen(!open)}>
-					<Button className="dropdown-item hover:bg-purple-500 py-3 px-5 block" text="Last 2 Week" />
-					<Button className="dropdown-item hover:bg-purple-500 py-3 px-5 block" text="Last 3 Week" />
+				<Button
+					className="add-btn bg-medium-slate-blue hover:bg-purple-500 py-3 px-6 2xl:py-5 2xl:px-10 2xl:text-3xl inline-flex"
+					icon={<AddIcon className="mr-3 w-5 h-5 2xl:w-8 2xl:h-8" />}
+					text="Add Food"
+				/>
+				<Dropdown icon={<DropdownIcon className="mr-3 w-4 h-4 2xl:w-7 2xl:h-7" />} isOpen={open} toggleList={() => setOpen(!open)}>
+					<Button className="dropdown-item hover:bg-purple-500 py-3 px-5 2xl:text-3xl" text="Last 2 Week" />
+					<Button className="dropdown-item hover:bg-purple-500 py-3 px-5 2xl:text-3xl" text="Last 3 Week" />
 				</Dropdown>
 			</div>
 		</div>

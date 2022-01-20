@@ -30,14 +30,14 @@ interface FoodRecordTableProps {
 const FoodRecordTable: React.FC<FoodRecordTableProps> = ({theadData, tbodyData}) => {
 	return (
 		<table className="block w-full h-full">
-			<thead className="font-poppins text-xs text-purple-300 text-left text-opacity-50">
+			<thead className="font-poppins text-xs 2xl:text-lg text-purple-300 text-left text-opacity-50">
 				<tr>
 					{theadData.map((th) => (
 						<TableHeadItem key={th} item={th} />
 					))}
 				</tr>
 			</thead>
-			<tbody className="overflow-y-scroll block w-full h-full font-poppins text-sm text-white text-left">
+			<tbody className="overflow-y-scroll block w-full h-full font-poppins text-sm 2xl:text-lg text-white text-left">
 				{tbodyData.map((data) => (
 					<TableRowItem key={data.id} data={data.food} />
 				))}

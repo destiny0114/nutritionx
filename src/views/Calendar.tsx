@@ -17,7 +17,7 @@ import FoodList from "../layout/calendar/FoodList";
 
 const Calendar: React.FC<{}> = () => {
 	return (
-		<div className="flex w-full space-x-6">
+		<div className="flex w-full space-x-6 select-none">
 			<div className="flex-auto">
 				<div className="flex space-y-4 w-full h-full flex-col">
 					<div className="flex-none h-4/6">

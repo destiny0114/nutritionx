@@ -9,4 +9,15 @@
  * MIT License
  * Copyright (c) 2021 Keena Levine
  */
-export default {};
+/* layout */
+import FoodExplorer from "../layout/explorer/FoodExplorer";
+
+const Explorer: React.FC<{}> = () => {
+	return (
+		<div className="w-full h-full select-none">
+			<FoodExplorer />
+		</div>
+	);
+};
+
+export default Explorer;

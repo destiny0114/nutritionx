@@ -69,6 +69,19 @@ body {
 	border-radius: 10px;
 }
 
+#grid-container {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-rows: repeat(12, auto);
+	grid-auto-flow: column;
+}
+
+@screen 2xl {
+	#food-record-container thead tr {
+		width: calc(100% - 1.2em);
+	}
+}
+
 @layer base {
 	.selected > svg {
 		@apply bg-purple-400 rounded-full shadow-md;

@@ -11,35 +11,12 @@
  */
 import Overview from "./views//Overview";
 import Calendar from "./views/Calendar";
+import Explorer from "./views/Explorer";
 
 interface Route {
 	path: string;
 	exact?: boolean;
 	children?: () => React.ReactElement;
-}
-
-function Home() {
-	return (
-		<div>
-			<h2>Home</h2>
-		</div>
-	);
-}
-
-function About() {
-	return (
-		<div>
-			<h2>About</h2>
-		</div>
-	);
-}
-
-function Dashboard() {
-	return (
-		<div>
-			<h2>Dashboard</h2>
-		</div>
-	);
 }
 
 const routes: Route[] = [
@@ -54,9 +31,9 @@ const routes: Route[] = [
 		children: () => <Calendar />,
 	},
 	{
-		path: "/s",
+		path: "/explorer",
 		exact: true,
-		children: () => <About />,
+		children: () => <Explorer />,
 	},
 ];
 

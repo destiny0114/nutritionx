@@ -14,14 +14,15 @@ import VerticalBarChart from "../../components/chart/VerticalBarChart";
 
 interface TodayNutritionsMonitorProps {
 	data: any[];
+	desktop: boolean;
 }
 
-const TodayNutritionsMonitor: React.FC<TodayNutritionsMonitorProps> = ({data}) => {
+const TodayNutritionsMonitor: React.FC<TodayNutritionsMonitorProps> = ({data, desktop}) => {
 	return (
-		<div className="bg-medium-slate-blue shadow-lg rounded-2xl row-span-1 px-5 py-3">
+		<div className="bg-medium-slate-blue shadow-lg rounded-2xl row-span-1 px-5 2xl:px-7 py-3">
 			<div className="barchart-wrapper w-full h-full">
-				<p className="font-poppins text-sm text-white w-full h-auto">Overview Analytics for Today</p>
-				<VerticalBarChart data={data} />
+				<p className="font-poppins text-sm 2xl:text-lg text-white w-full h-auto">Overview Analytics for Today</p>
+				<VerticalBarChart data={data} desktop={desktop} />
 			</div>
 		</div>
 	);
