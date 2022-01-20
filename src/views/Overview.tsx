@@ -17,6 +17,8 @@ import WeekNutritionsMonitor from "../layout/overview/WeekNutritionsMonitor";
 import RadialCaloriesMonitor from "../layout/overview/RadialCaloriesMonitor";
 import TodayNutritionsMonitor from "../layout/overview/TodayNutritionsMonitor";
 
+import useWindowDimensions from "../hook/useWindowDimensions";
+
 interface DummyData {
 	nutritions: {
 		carbs: number;
@@ -106,23 +108,29 @@ const useDebounce = <T extends {}>(value: T, delay: number): T => {
 };
 
 const Overview: React.FC<{}> = () => {
+	const dimension = useWindowDimensions();
+
+	const responsive = {
+		desktop: dimension.width > 1536,
+	};
+
 	useEffect(() => {
 		calculateCalories(dummyData[0].nutritions);
 	}, []);
 
 	return (
-		<div className="overview flex w-full space-x-6">
+		<div className="overview flex w-full space-x-6 select-none">
 			<div className="flex-auto">
 				<div className="flex space-y-4 w-full h-full flex-col">
 					<FeatureBar />
 					<AverageNutritions />
-					<WeekNutritionsMonitor data={dummyData} />
+					<WeekNutritionsMonitor data={dummyData} desktop={responsive.desktop} />
 				</div>
 			</div>
 			<div className="flex-none w-1/4 h-auto">
 				<div className="grid grid-rows-2 gap-5 w-full h-full">
 					<RadialCaloriesMonitor data={[{name: "D1", value: 1520}]} />
-					<TodayNutritionsMonitor data={[dummyData[0]]} />
+					<TodayNutritionsMonitor data={[dummyData[0]]} desktop={responsive.desktop} />
 				</div>
 			</div>
 		</div>

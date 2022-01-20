@@ -21,9 +21,9 @@ const Card: React.FC<CardProps> = ({title, value, unit, icon}) => {
 		<div className="bg-medium-slate-blue shadow-lg rounded-2xl flex flex-col justify-center items-center">
 			{icon}
 			<p className="title font-poppins text-white text-center break-word text-sm mt-6 mb-2 2xl:text-xl">{title}</p>
-			<p className="value font-poppins text-white text-center text-4xl">
+			<p className="value font-poppins text-white text-center text-4xl 2xl:text-5xl">
 				{value.toString()}
-				<span className="unit font-poppins text-white text-center text-sm ml-1">{unit}</span>
+				<span className="unit font-poppins text-white text-center text-sm 2xl:text-lg ml-1">{unit}</span>
 			</p>
 		</div>
 	);

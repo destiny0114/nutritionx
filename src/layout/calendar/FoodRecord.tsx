@@ -30,7 +30,7 @@ const tbodyData = [
 const FoodRecord: React.FC<{}> = () => {
 	return (
 		<div className="flex flex-col w-full h-full bg-medium-slate-blue shadow-lg rounded-2xl p-5 overflow-hidden">
-			<p className="font-poppins text-sm text-white">You had</p>
+			<p className="font-poppins text-sm 2xl:text-xl text-white">You had</p>
 			<div id="food-record-container" className="w-full h-full overflow-hidden">
 				<FoodRecordTable theadData={theadData} tbodyData={tbodyData} />
 			</div>

@@ -22,10 +22,10 @@ const Dropdown: React.FC<DropdownProps> = ({children, icon, isOpen, toggleList})
 	const handleToggle = () => toggleList();
 
 	return (
-		<>
-			<Button className="dropdown bg-medium-slate-blue hover:bg-purple-500 py-3 px-6 inline-flex" icon={icon} text="Last Week" onClick={handleToggle} />
-			{isOpen && <div className="dropdown-list bg-purple-900 w-auto h-auto absolute top-14 right-0 rounded-lg origin-top-right p-2.5 shadow-2xl">{children}</div>}
-		</>
+		<div className="dropdown relative">
+			<Button className="bg-medium-slate-blue hover:bg-purple-500 py-3 px-6 2xl:py-5 2xl:px-10 2xl:text-3xl inline-flex" icon={icon} text="Last Week" onClick={handleToggle} />
+			{isOpen && <div className="dropdown-list bg-purple-900 h-auto absolute top-full inset-x-0 flex flex-col space-y-2 2xl:space-y-5 mt-2 rounded-lg p-2.5 shadow-2xl">{children}</div>}
+		</div>
 	);
 };
 

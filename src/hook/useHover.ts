@@ -16,9 +16,9 @@ export type EventHandler = {
 	onMouseOut(): void;
 };
 
-type HoverProps = () => [isFocus: boolean, handler: EventHandler];
+type HoverProps = [isFocus: boolean, handler: EventHandler];
 
-export const useHover: HoverProps = () => {
+export default function useHover(): HoverProps {
 	const [focusBar, setFocusBar] = useState(false);
 	const eventHandlers = useMemo(
 		() => ({
@@ -32,4 +32,4 @@ export const useHover: HoverProps = () => {
 		[]
 	);
 	return [focusBar, eventHandlers];
-};
+}

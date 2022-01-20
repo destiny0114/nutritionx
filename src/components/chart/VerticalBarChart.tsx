@@ -16,24 +16,25 @@ import {Props as RectangleProps} from "recharts/types/shape/Rectangle";
 
 interface VerticalBarChartProps {
 	data: any[];
+	desktop: boolean;
 }
 
 interface CustomLabelListProps extends LabelProps {
 	name: string;
+	desktop: boolean;
 }
 
 const calculateHeight = (y: number, height: number) => y - height;
 
 const CustomizedLabel: React.FC<CustomLabelListProps> = (props) => {
-	const {name, y, height, value} = props;
-	console.log(props);
+	const {name, y, height, value, desktop} = props;
 
 	return (
 		<g transform="translate(0, 0)">
-			<text x="0" y={calculateHeight(y as number, height as number)} fill="#fff" fontFamily="poppins" textAnchor="start" dominantBaseline="middle">
+			<text x="0" y={calculateHeight(y as number, height as number)} fill="#fff" fontFamily="poppins" fontSize={desktop ? 23 : 15} textAnchor="start" dominantBaseline="middle">
 				{`${name}`}
 			</text>
-			<text x="100%" y={calculateHeight(y as number, height as number)} fill="#fff" fontFamily="poppins" textAnchor="end" dominantBaseline="middle">
+			<text x="100%" y={calculateHeight(y as number, height as number)} fill="#fff" fontFamily="poppins" fontSize={desktop ? 23 : 15} textAnchor="end" dominantBaseline="middle">
 				{`${value}`}
 			</text>
 		</g>
@@ -46,12 +47,12 @@ const CustomizedBackground: React.FC<RectangleProps> = (props) => {
 	return <rect width={width} height={height} x={x} y={y} rx={5} ry={5} opacity={0.8} fill="white" />;
 };
 
-const VerticalBarChart: React.FC<VerticalBarChartProps> = ({data}) => {
+const VerticalBarChart: React.FC<VerticalBarChartProps> = ({data, desktop}) => {
 	const barChartProps: CategoricalChartProps = {
 		data: data,
 		layout: "vertical",
-		barSize: 8,
-		barGap: 45,
+		barSize: desktop ? 12 : 8,
+		barGap: desktop ? 70 : 45,
 		margin: {
 			top: 20,
 		},
@@ -75,7 +76,7 @@ const VerticalBarChart: React.FC<VerticalBarChartProps> = ({data}) => {
 			fill: "url(#calories-v-gradient)",
 			radius: 25,
 			background: <CustomizedBackground />,
-			children: <LabelList dataKey="nutritions.calories" content={<CustomizedLabel name="Calories" />} />,
+			children: <LabelList dataKey="nutritions.calories" content={<CustomizedLabel name="Calories" desktop={desktop} />} />,
 		},
 		{
 			name: "Carbs",
@@ -83,7 +84,7 @@ const VerticalBarChart: React.FC<VerticalBarChartProps> = ({data}) => {
 			fill: "url(#carbs-v-gradient)",
 			radius: 25,
 			background: <CustomizedBackground />,
-			children: <LabelList dataKey="nutritions.carbs" content={<CustomizedLabel name="Carbs" />} />,
+			children: <LabelList dataKey="nutritions.carbs" content={<CustomizedLabel name="Carbs" desktop={desktop} />} />,
 		},
 		{
 			name: "Proteins",
@@ -91,7 +92,7 @@ const VerticalBarChart: React.FC<VerticalBarChartProps> = ({data}) => {
 			fill: "url(#proteins-v-gradient)",
 			radius: 25,
 			background: <CustomizedBackground />,
-			children: <LabelList dataKey="nutritions.proteins" content={<CustomizedLabel name="Proteins" />} />,
+			children: <LabelList dataKey="nutritions.proteins" content={<CustomizedLabel name="Proteins" desktop={desktop} />} />,
 		},
 		{
 			name: "Fats",
@@ -99,7 +100,7 @@ const VerticalBarChart: React.FC<VerticalBarChartProps> = ({data}) => {
 			fill: "url(#fats-v-gradient)",
 			radius: 25,
 			background: <CustomizedBackground />,
-			children: <LabelList dataKey="nutritions.fats" content={<CustomizedLabel name="Fats" />} />,
+			children: <LabelList dataKey="nutritions.fats" content={<CustomizedLabel name="Fats" desktop={desktop} />} />,
 		},
 	];
 

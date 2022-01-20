@@ -22,10 +22,10 @@ const Navigation: React.FC = () => {
 		<nav className="navigation w-20 shadow-2xl flex-none">
 			<div className="w-full h-full py-7 bg-lavender rounded-xl flex flex-col items-center">
 				<div className="logo flex-none">
-					<LogoIcon className="w-10 h-10" />
+					<LogoIcon className="w-10 h-10 2xl:w-12 2xl:h-12" />
 				</div>
 				<div className="link-buttons flex-grow w-full h-auto flex justify-center items-center">
-					<ul className="space-y-8">
+					<ul className="space-y-8 2xl:space-y-16">
 						<li>
 							<NavLink className="w-auto h-auto" to="/overview" exact activeClassName="selected">
 								<OverviewIcon className="w-14 h-14 p-2" />
@@ -37,7 +37,7 @@ const Navigation: React.FC = () => {
 							</NavLink>
 						</li>
 						<li>
-							<NavLink className="w-auto h-auto" to="/s" exact activeClassName="selected">
+							<NavLink className="w-auto h-auto" to="/explorer" exact activeClassName="selected">
 								<FoodIcon className="w-14 h-14 p-2" />
 							</NavLink>
 						</li>
