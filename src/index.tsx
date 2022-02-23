@@ -12,7 +12,9 @@
 import "./index.css";
 import ReactDOM from "react-dom";
 import {BrowserRouter as Router, Switch, Route, Redirect} from "react-router-dom";
-
+import {Provider} from "react-redux";
+/* redux store */
+import {store} from "./services";
 /* routes */
 import routes from "./routes";
 
@@ -21,18 +23,20 @@ import Navigation from "./components/Navigation";
 
 const App: React.FC = () => {
 	return (
-		<div className="app absolute inset-0 flex max-h-full max-w-full m-5 space-x-10">
-			<Router>
-				<Navigation />
+		<Provider store={store}>
+			<div className="app absolute inset-0 flex max-h-full max-w-full m-5 space-x-10">
+				<Router>
+					<Navigation />
 
-				<Switch>
-					{routes.map((entry, index) => {
-						return <Route key={index} {...entry} />;
-					})}
-					<Redirect to="/overview" />
-				</Switch>
-			</Router>
-		</div>
+					<Switch>
+						{routes.map((entry, index) => {
+							return <Route key={index} {...entry} />;
+						})}
+						<Redirect to="/overview" />
+					</Switch>
+				</Router>
+			</div>
+		</Provider>
 	);
 };
 

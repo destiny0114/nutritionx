@@ -9,9 +9,9 @@
  * MIT License
  * Copyright (c) 2021 Keena Levine
  */
-import Overview from "./views//Overview";
-import Calendar from "./views/Calendar";
-import Explorer from "./views/Explorer";
+import Overview from "./pages/Overview";
+import Calendar from "./pages/Calendar";
+import Explorer from "./pages/Explorer";
 
 interface Route {
 	path: string;

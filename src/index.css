@@ -10,6 +10,9 @@ body {
 	margin: 0;
 	overflow: hidden;
 	box-sizing: content-box;
+	display: flex;
+	flex: 1; /* no need anymore to deal with height/width */
+	flex-direction: column;
 }
 
 ::-webkit-scrollbar {
@@ -71,14 +74,67 @@ body {
 
 #grid-container {
 	display: grid;
-	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-columns: 1fr 1fr;
 	grid-template-rows: repeat(12, auto);
 	grid-auto-flow: column;
+	gap: 1.4rem;
+}
+
+.loader,
+.loader:after {
+	border-radius: 50%;
+	width: 10em;
+	height: 10em;
+}
+.loader {
+	font-size: 6px;
+	text-align: center;
+	position: absolute;
+	top: 50%;
+	bottom: 50%;
+	left: 0;
+	right: 0;
+	transform: translate(-50%, -50%);
+	margin: auto;
+	text-indent: -9999em;
+	border-top: 1.1em solid #afafaf33;
+	border-right: 1.1em solid #afafaf33;
+	border-bottom: 1.1em solid #afafaf33;
+	border-left: 1.1em solid #7165e3;
+	-webkit-transform: translateZ(0);
+	-ms-transform: translateZ(0);
+	transform: translateZ(0);
+	-webkit-animation: load8 1.1s infinite linear;
+	animation: load8 1.1s infinite linear;
+}
+@-webkit-keyframes load8 {
+	0% {
+		-webkit-transform: rotate(0deg);
+		transform: rotate(0deg);
+	}
+	100% {
+		-webkit-transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
+}
+@keyframes load8 {
+	0% {
+		-webkit-transform: rotate(0deg);
+		transform: rotate(0deg);
+	}
+	100% {
+		-webkit-transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
 }
 
 @screen 2xl {
 	#food-record-container thead tr {
 		width: calc(100% - 1.2em);
+	}
+
+	.loader {
+		font-size: 10px;
 	}
 }
 

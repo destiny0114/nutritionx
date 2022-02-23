@@ -10,7 +10,7 @@
  * Copyright (c) 2021 Keena Levine
  */
 /* util */
-import {classNames} from "../../utils";
+import {classNames} from "../../utils/common";
 
 interface ButtonProps {
 	icon?: React.ReactNode;
