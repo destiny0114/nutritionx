@@ -9,6 +9,8 @@
  * MIT License
  * Copyright (c) 2022 Keena Levine
  */
+import React from "react";
+/* types */
 import {FoodSelect} from "../../../services";
 
 interface FoodCommonNutrientProps {
@@ -16,18 +18,16 @@ interface FoodCommonNutrientProps {
 }
 
 const FoodCommonNutrient: React.FC<FoodCommonNutrientProps> = ({nutrients}) => {
-	return (
-		<div id="grid-container">
-			{nutrients.common.map((nutrient) => (
-				<div className="flex justify-between items-center mx-3 2xl:my-2.5" key={nutrient.name}>
-					<p className="font-poppins 2xl:text-2xl capitalize">{nutrient.name}</p>
-					<p className="font-poppins 2xl:text-2xl">
-						{Math.round(nutrient.value)} {nutrient.unit}
-					</p>
-				</div>
-			))}
+	const renderedCommonNutrients = nutrients.common.map((nutrient) => (
+		<div className="flex justify-between items-center mx-3 2xl:my-2.5" key={nutrient.name}>
+			<p className="font-poppins 2xl:text-2xl capitalize">{nutrient.name}</p>
+			<p className="font-poppins 2xl:text-2xl">
+				{Math.round(nutrient.value)} {nutrient.unit}
+			</p>
 		</div>
-	);
+	));
+
+	return <div id="grid-container">{renderedCommonNutrients}</div>;
 };
 
-export default FoodCommonNutrient;
+export default React.memo(FoodCommonNutrient);

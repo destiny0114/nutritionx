@@ -9,19 +9,20 @@
  * MIT License
  * Copyright (c) 2021 Keena Levine
  */
+import React from "react";
 /* components */
 import FoodMainInfo from "./FoodMainInfo";
 import FoodCommonNutrient from "./FoodCommonNutrient";
+import LottieEmptyFood from "../LottieEmptyFood";
+/* types */
+import {FoodSelect} from "../../../services";
 
-/* illustration */
-import {ReactComponent as ChoosingIllustration} from "../../../assets/sprites/food-choosing.svg";
-/* hook */
-import {useTypedSelector} from "../../../hook/useTypedSelector";
+interface FoodViewProps {
+	foodSelected: FoodSelect | null;
+}
 
-const FoodView: React.FC<{}> = () => {
-	const foodSelected = useTypedSelector(({foodState: {selectedFood}}) => selectedFood);
-
-	if (!foodSelected) return <ChoosingIllustration className="w-full h-full absolute top-0 left-0 object-fill" />;
+const FoodView: React.FC<FoodViewProps> = ({foodSelected}) => {
+	if (!foodSelected) return <LottieEmptyFood />;
 
 	return (
 		<div className="flex w-full h-full space-x-4">
@@ -35,4 +36,10 @@ const FoodView: React.FC<{}> = () => {
 	);
 };
 
-export default FoodView;
+function arePropsEqual(prevProps: Readonly<FoodViewProps>, nextProps: Readonly<FoodViewProps>): boolean {
+	if (!(nextProps.foodSelected && prevProps.foodSelected)) return false;
+
+	return prevProps.foodSelected.food_name === nextProps.foodSelected.food_name;
+}
+
+export default React.memo(FoodView, arePropsEqual);

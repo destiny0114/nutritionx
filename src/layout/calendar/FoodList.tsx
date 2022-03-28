@@ -9,17 +9,33 @@
  * MIT License
  * Copyright (c) 2021 Keena Levine
  */
+import React, {useCallback, useEffect, useMemo} from "react";
 /* components */
 import FoodItem from "../../components/ui/foodlist/FoodItem";
+/* types */
+import {Food} from "../../services";
+/* hook */
+import {useTypedSelector} from "../../hook/useTypedSelector";
+import useAction from "../../hook/useAction";
 
-const FoodList: React.FC<{}> = () => {
+interface FoodListProps {
+	onAddFoodRecord: (food: Food) => void;
+}
+
+const FoodList: React.FC<FoodListProps> = ({onAddFoodRecord}) => {
+	const foodList = useTypedSelector(({foodState: {data}}) => data.items);
+
+	if (typeof foodList === undefined || !foodList.length) return <p className="absolute inset-0 flex items-center justify-center font-poppins font-medium text-2xl opacity-40">Try Search a Food</p>;
+
+	const renderedFoodList = foodList.map((food, index) => <FoodItem food={food} key={index} onAddFoodRecord={onAddFoodRecord} />);
+
 	return (
-		<div className="w-full h-full bg-light-purple border-medium-slate-blue border-2 shadow-lg rounded-2xl p-5">
-			<div id="food-list-container" className="w-full h-full flex flex-col space-y-4 overflow-y-scroll px-1 rounded-2xl">
-				<FoodItem name="Tomato" calories={150} weight={45} serving={1} />
-			</div>
+		<div id="food-list-container" className="w-full h-full flex flex-col space-y-4 overflow-y-scroll overflow-x-hidden px-1 rounded-2xl">
+			{renderedFoodList}
 		</div>
 	);
 };
 
-export default FoodList;
+const MemoizeFoodList = React.memo(FoodList);
+
+export default MemoizeFoodList;

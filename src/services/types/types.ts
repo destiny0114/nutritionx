@@ -17,4 +17,10 @@ export enum ActionTypes {
 	FETCH_NUTRITION_COMPLETE = "fetch_nutrition_complete",
 	FETCH_NUTRITION_FAIL = "fetch_nutrition_fail",
 	SELECT_FOOD = "select_food",
+	SELECT_FOOD_RECORD_BY_DATE = "select_food_record_by_date",
+	ADD_FOOD_RECORD = "add_food_record",
+	SAVE_RECORD_COMPLETE = "save_record_complete",
+	SAVE_RECORD_FAIL = "save_record_fail",
+	LOAD_RECORDS_COMPLETE = "load_records_complete",
+	LOAD_RECORDS_FAIL = "load_records_fail",
 }

@@ -35,4 +35,4 @@ const SuggestionList: React.FC<SuggestionListProps> = ({suggestions, onToggleSug
 	);
 };
 
-export default React.memo(SuggestionList);
+export default SuggestionList;

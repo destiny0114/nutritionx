@@ -11,31 +11,25 @@
  */
 /* component */
 import FoodRecordTable from "../../components/ui/foodrecord/FoodRecordTable";
+/* hook */
+import {useTypedSelector} from "../../hook/useTypedSelector";
 
 const theadData = ["Food", "Calories", "Carbs", "Proteins", "Fat"];
 
-const tbodyData = [
-	{
-		id: 1,
-		food: {
-			name: "Burger",
-			calories: "150kcal",
-			carbs: "50g",
-			proteins: "12g",
-			fats: "6g",
-		},
-	},
-];
+const DisplayFoodRecord: React.FC<{}> = () => {
+	const recordList = useTypedSelector(({userState: {foodRecordSelected}}) => foodRecordSelected);
 
-const FoodRecord: React.FC<{}> = () => {
+	if (typeof recordList === undefined || !recordList.length)
+		return <p className="flex w-full h-full justify-center items-center font-poppins text-base 2xl:text-xl text-center text-white opacity-25">Please Add a Record</p>;
+
 	return (
-		<div className="flex flex-col w-full h-full bg-medium-slate-blue shadow-lg rounded-2xl p-5 overflow-hidden">
+		<div className="flex flex-col w-full h-full overflow-hidden">
 			<p className="font-poppins text-sm 2xl:text-xl text-white">You had</p>
 			<div id="food-record-container" className="w-full h-full overflow-hidden">
-				<FoodRecordTable theadData={theadData} tbodyData={tbodyData} />
+				<FoodRecordTable theadData={theadData} tbodyData={recordList} />
 			</div>
 		</div>
 	);
 };
 
-export default FoodRecord;
+export default DisplayFoodRecord;

@@ -9,7 +9,6 @@
  * MIT License
  * Copyright (c) 2022 Keena Levine
  */
-
 import {useEffect, useRef} from "react";
 
 export default function useOuterClick<T extends Element>(callback: () => void) {
@@ -18,11 +17,11 @@ export default function useOuterClick<T extends Element>(callback: () => void) {
 	useEffect(() => {
 		const handleOuterClick = (e: MouseEvent) => {
 			if (ref.current && e.target && ref.current.contains(e.target as Node)) return;
+			// e.stopPropagation();
 			callback();
 		};
 
 		document.addEventListener("click", handleOuterClick, {capture: true});
-
 		return () => document.removeEventListener("click", handleOuterClick, {capture: true});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);

@@ -35,12 +35,8 @@ body {
 	font-family: "Poppins", sans-serif !important;
 }
 
-.fc-day-today {
-	background: linear-gradient(45deg, #ff4ead 0%, #f79cff 100%) !important;
-}
-
 .day-select {
-	background-color: #65b5e3;
+	background-color: #3f2a706b;
 }
 
 #food-record-container thead tr,

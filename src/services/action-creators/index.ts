@@ -10,4 +10,4 @@
  * Copyright (c) 2022 Keena Levine
  */
 export * from "./request.actions";
-export * from "./food.actions";
+export * from "./user.actions";

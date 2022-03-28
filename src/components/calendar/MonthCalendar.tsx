@@ -17,7 +17,11 @@ import interactionPlugin, {DateClickArg} from "@fullcalendar/interaction";
 import {ReactComponent as LeftArrowIcon} from "../../assets/icons/left-arrow.svg";
 import {ReactComponent as RightArrowIcon} from "../../assets/icons/right-arrow.svg";
 
-const MonthCalendar: React.FC<{}> = () => {
+interface MonthCalendarProps {
+	onDateSelect: (dateSelected: string) => void;
+}
+
+const MonthCalendar: React.FC<MonthCalendarProps> = ({onDateSelect}) => {
 	const calendarRef = useRef<FullCalendar>(null);
 	const [prevDayEl, setPrevDayEl] = useState<HTMLElement | null>();
 
@@ -26,7 +30,7 @@ const MonthCalendar: React.FC<{}> = () => {
 		initialView: "dayGridMonth",
 		height: "100%",
 		fixedWeekCount: true,
-		showNonCurrentDates: false,
+		showNonCurrentDates: true,
 		headerToolbar: {
 			start: "title",
 			center: "",
@@ -34,13 +38,13 @@ const MonthCalendar: React.FC<{}> = () => {
 		},
 	};
 
-	const dateClickHandler = ({dayEl}: DateClickArg) => {
+	const dateClickHandler = (info: DateClickArg) => {
 		if (prevDayEl) {
 			prevDayEl.classList.remove("day-select");
 		}
-
-		dayEl.classList.add("day-select");
-		setPrevDayEl(dayEl);
+		info.dayEl.classList.add("day-select");
+		setPrevDayEl(info.dayEl);
+		onDateSelect(info.date.toLocaleDateString());
 	};
 
 	const nextMonthHandler = () => {

@@ -34,4 +34,13 @@ export function capitalize(input: string) {
 	return input.charAt(0).toUpperCase() + input.slice(1);
 }
 
+export function getToday(inputDate: Date) {
+	const today = inputDate;
+	const yyyy = today.getFullYear();
+	let mm = String(today.getMonth() + 1).padStart(2, "0");
+	let dd = String(today.getDate()).padStart(2, "0");
+
+	return dd + "/" + mm + "/" + yyyy;
+}
+
 export type Modify<T, R> = Omit<T, keyof R> & R;

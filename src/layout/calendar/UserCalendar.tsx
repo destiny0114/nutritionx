@@ -12,10 +12,14 @@
 /* component */
 import MonthCalendar from "../../components/calendar/MonthCalendar";
 
-const UserCalendar: React.FC<{}> = () => {
+interface UserCalendarProps {
+	onDateSelect: (date: string) => void;
+}
+
+const UserCalendar: React.FC<UserCalendarProps> = ({onDateSelect}) => {
 	return (
 		<div className="w-full h-full bg-medium-slate-blue shadow-lg rounded-2xl px-8 py-5">
-			<MonthCalendar />
+			<MonthCalendar onDateSelect={onDateSelect} />
 		</div>
 	);
 };

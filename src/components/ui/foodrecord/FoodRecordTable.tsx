@@ -12,19 +12,12 @@
 /* component */
 import TableHeadItem from "./TableHeadItem";
 import TableRowItem from "./TableRowItem";
+/* types */
+import {FoodRecord} from "../../../services";
 
 interface FoodRecordTableProps {
 	theadData: string[];
-	tbodyData: {
-		id: number;
-		food: {
-			name: string;
-			calories: string;
-			carbs: string;
-			proteins: string;
-			fats: string;
-		};
-	}[];
+	tbodyData: FoodRecord[];
 }
 
 const FoodRecordTable: React.FC<FoodRecordTableProps> = ({theadData, tbodyData}) => {
@@ -38,8 +31,8 @@ const FoodRecordTable: React.FC<FoodRecordTableProps> = ({theadData, tbodyData})
 				</tr>
 			</thead>
 			<tbody className="overflow-y-scroll block w-full h-full font-poppins text-sm 2xl:text-lg text-white text-left">
-				{tbodyData.map((data) => (
-					<TableRowItem key={data.id} data={data.food} />
+				{tbodyData.map((data, index) => (
+					<TableRowItem key={index} data={data} />
 				))}
 			</tbody>
 		</table>

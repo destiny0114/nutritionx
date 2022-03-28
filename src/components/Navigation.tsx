@@ -10,14 +10,21 @@
  * Copyright (c) 2021 Keena Levine
  */
 import {NavLink} from "react-router-dom";
-
+import {useEffect} from "react";
 /* UI */
 import {ReactComponent as LogoIcon} from "../assets/icons/logo.svg";
 import {ReactComponent as OverviewIcon} from "../assets/icons/overview.svg";
 import {ReactComponent as CalenderIcon} from "../assets/icons/calender.svg";
 import {ReactComponent as FoodIcon} from "../assets/icons/food.svg";
+import useAction from "../hook/useAction";
 
 const Navigation: React.FC = () => {
+	const {loadRecords} = useAction();
+
+	useEffect(() => {
+		loadRecords();
+	}, [loadRecords]);
+
 	return (
 		<nav className="navigation w-20 shadow-2xl flex-none">
 			<div className="w-full h-full py-7 bg-lavender rounded-xl flex flex-col items-center">

@@ -15,19 +15,24 @@ import FoodView from "../../components/ui/foodexplorer/FoodView";
 /* hook */
 import useSearch from "../../hook/useSearch";
 import useOuterClick from "../../hook/useOuterClick";
+import {useTypedSelector} from "../../hook/useTypedSelector";
 
-const FoodExplorer: React.FC<{}> = () => {
+const FoodExplorer: React.FC = () => {
+	const {foodState, userState} = useTypedSelector((state) => state);
 	const [onTermSubmit, openSuggestions, onToggleSuggestions] = useSearch("", 275);
 	const ref = useOuterClick<HTMLDivElement>(() => onToggleSuggestions(false));
+
+	const searchResults = foodState.data.items.slice(0, 5);
+	const currentFood = userState.foodSelected;
 
 	return (
 		<div className="flex space-y-4 w-full h-full flex-col">
 			<div ref={ref} className="flex-none h-12 2xl:h-16">
-				<AutoComplete onTermSubmit={onTermSubmit} openSuggestions={openSuggestions} onToggleSuggestions={onToggleSuggestions} />
+				<AutoComplete searchResults={searchResults} onTermSubmit={onTermSubmit} openSuggestions={openSuggestions} onToggleSuggestions={onToggleSuggestions} />
 			</div>
 			<div className="flex-grow w-full h-full">
 				<div className="w-full h-full p-5 relative bg-light-purple border-medium-slate-blue border-2 shadow-lg rounded-2xl">
-					<FoodView />
+					<FoodView foodSelected={currentFood} />
 				</div>
 			</div>
 		</div>

@@ -26,14 +26,14 @@ const SuggestionItem: React.FC<SuggestionItemProps> = ({food, onToggleSuggestion
 	const {food_name, photo, serving_unit, serving_qty, serving_weight_grams, full_nutrients} = food;
 	const {selectFood} = useAction();
 
-	if (!food.full_nutrients) return null;
+	if (!full_nutrients) return null;
 
 	const onButtonClicked = () => {
 		selectFood(food);
 		onToggleSuggestions(false);
 	};
 
-	const nutrient = findNutrientById(full_nutrients, 208, (data) => {
+	const calories = findNutrientById(full_nutrients, 208, (data) => {
 		if (data) return `${Math.round(data.value).toString()} calories`;
 		return "Unknown";
 	});
@@ -47,9 +47,13 @@ const SuggestionItem: React.FC<SuggestionItemProps> = ({food, onToggleSuggestion
 					{serving_qty} {serving_unit} &middot; {Math.round(serving_weight_grams)}g
 				</p>
 			</div>
-			<p className="font-poppins font-medium text-sm 2xl:text-lg group-hover:text-purple-300 text-gray-400 ml-auto">{nutrient}</p>
+			<p className="font-poppins font-medium text-sm 2xl:text-lg group-hover:text-purple-300 text-gray-400 ml-auto">{calories}</p>
 		</div>
 	);
 };
 
-export default React.memo(SuggestionItem);
+function arePropsEqual(prevProps: Readonly<SuggestionItemProps>, nextProps: Readonly<SuggestionItemProps>): boolean {
+	return prevProps.food.food_name === nextProps.food.food_name;
+}
+
+export default React.memo(SuggestionItem, arePropsEqual);

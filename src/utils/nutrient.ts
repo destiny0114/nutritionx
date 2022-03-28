@@ -13,10 +13,12 @@ import {Food} from "../services";
 
 type NutrientList = Pick<Food["full_nutrients"][number], "attr_id" | "value">[];
 
-export function findNutrientById(nutrientList: NutrientList, attr_id: number, formatter: (nutrient: {attr_id: number; value: number} | undefined) => string) {
+export function findNutrientById(nutrientList: NutrientList, attr_id: number, formatter: (nutrient: {attr_id: number; value: number} | undefined) => string | number) {
 	if (typeof nutrientList === undefined || !nutrientList.length) return;
 
 	const nutrient = nutrientList.find((item) => item.attr_id === attr_id);
 
 	return formatter(nutrient);
 }
+
+//export function filterNutrients

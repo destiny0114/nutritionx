@@ -9,24 +9,26 @@
  * MIT License
  * Copyright (c) 2021 Keena Levine
  */
+/* types */
+import {FoodRecord} from "../../../services";
+
 interface TableRowItemProps {
-	data: {
-		name: string;
-		calories: string;
-		carbs: string;
-		proteins: string;
-		fats: string;
-	};
+	data: FoodRecord;
 }
 
-const TableRowItem: React.FC<TableRowItemProps> = ({data: {name, calories, carbs, proteins, fats}}) => {
+const TableRowItem: React.FC<TableRowItemProps> = ({data}) => {
+	const {
+		food_name,
+		nutrient: {calories, carbs, proteins, fats},
+	} = data;
+
 	return (
 		<tr>
-			<td>{name}</td>
-			<td>{calories}</td>
-			<td>{carbs}</td>
-			<td>{proteins}</td>
-			<td>{fats}</td>
+			<td className="capitalize">{food_name}</td>
+			<td>{Math.round(calories)}g</td>
+			<td>{Math.round(carbs)}g</td>
+			<td>{Math.round(proteins)}g</td>
+			<td>{Math.round(fats)}g</td>
 		</tr>
 	);
 };

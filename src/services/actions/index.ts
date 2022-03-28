@@ -10,4 +10,4 @@
  * Copyright (c) 2022 Keena Levine
  */
 export * from "./request.interfaces";
-export * from "./food.interfaces";
+export * from "./user.interfaces";

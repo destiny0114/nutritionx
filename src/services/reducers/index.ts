@@ -12,11 +12,13 @@
 import {combineReducers} from "redux";
 /* reducers */
 import foodReducer from "./foodReducer";
+import userReducer from "./user.reducer";
 
-const reducers = combineReducers({
+const rootReducer = combineReducers({
 	foodState: foodReducer,
+	userState: userReducer,
 });
 
-export default reducers;
+export default rootReducer;
 
-export type RootState = ReturnType<typeof reducers>;
+export type RootState = ReturnType<typeof rootReducer>;

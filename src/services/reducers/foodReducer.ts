@@ -12,13 +12,9 @@
 import {produce} from "immer";
 /* action */
 import {ActionTypes} from "../types";
-import {RequestApiAction, FoodAction} from "../actions";
+import {RequestApiAction} from "../actions";
 /* types */
 import {Food} from "../food";
-import {baseNutrients} from "../nutrient";
-import {FoodSelect} from "../foodselect";
-/* utils */
-import {splitArray} from "../../utils/common";
 
 interface FoodState {
 	loading: boolean;
@@ -26,7 +22,6 @@ interface FoodState {
 	data: {
 		items: Food[];
 	};
-	selectedFood: FoodSelect | null;
 }
 
 const initialState: FoodState = {
@@ -35,10 +30,9 @@ const initialState: FoodState = {
 	data: {
 		items: [],
 	},
-	selectedFood: null,
 };
 
-const foodReducer = (state: FoodState = initialState, action: RequestApiAction | FoodAction) =>
+const foodReducer = (state: FoodState = initialState, action: RequestApiAction) =>
 	produce(state, (draft) => {
 		switch (action.type) {
 			case ActionTypes.FETCH_FOOD_LIST_LOADING:
@@ -54,26 +48,6 @@ const foodReducer = (state: FoodState = initialState, action: RequestApiAction |
 				draft.loading = false;
 				draft.error = action.payload;
 				draft.data.items = [];
-				return draft;
-			case ActionTypes.SELECT_FOOD:
-				const {food_name, serving_unit, serving_qty, serving_weight_grams, full_nutrients, photo} = action.payload;
-				const filteredNutrients = full_nutrients.filter((nutrient) => baseNutrients.some((match) => match.attr_id === nutrient.attr_id));
-				const nutrients = baseNutrients.map((item) => ({...item, ...filteredNutrients.find((nutrient) => nutrient.attr_id === item.attr_id)}));
-				const [primary, common] = splitArray(nutrients, (index) => index < 11);
-
-				const foodChoosed: FoodSelect = {
-					food_name,
-					serving_unit,
-					serving_qty,
-					serving_weight_grams,
-					photo,
-					full_nutrients: {
-						primary,
-						common,
-					},
-				};
-
-				draft.selectedFood = foodChoosed;
 				return draft;
 			default:
 				return draft;

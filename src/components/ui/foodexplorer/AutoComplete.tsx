@@ -13,18 +13,17 @@ import {ChangeEvent} from "react";
 /* component */
 import {ReactComponent as SearchIcon} from "../../../assets/icons/search.svg";
 import SuggestionList from "./SuggestionList";
-/* hook */
-import {useTypedSelector} from "../../../hook/useTypedSelector";
+/* types */
+import {Food} from "../../../services";
 
 interface AutoCompleteProps {
+	searchResults: Food[];
 	onTermSubmit: (term: string) => void;
 	openSuggestions: boolean;
 	onToggleSuggestions: (open: boolean) => void;
 }
 
-const AutoComplete: React.FC<AutoCompleteProps> = ({onTermSubmit, openSuggestions, onToggleSuggestions}) => {
-	const searchResults = useTypedSelector(({foodState: {data}}) => data.items.slice(0, 5));
-
+const AutoComplete: React.FC<AutoCompleteProps> = ({searchResults, onTermSubmit, openSuggestions, onToggleSuggestions}) => {
 	const onInputChanged = (e: ChangeEvent<HTMLInputElement>) => {
 		e.preventDefault();
 		onTermSubmit(e.target.value);

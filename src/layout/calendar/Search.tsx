@@ -12,10 +12,14 @@
 /* components */
 import SearchBar from "../../components/ui/SearchBar";
 
-const Search: React.FC<{}> = () => {
+interface SearchProps {
+	onTermSubmit: (term: string) => void;
+}
+
+const Search: React.FC<SearchProps> = ({onTermSubmit}) => {
 	return (
 		<div className="w-auto h-auto">
-			<SearchBar />
+			<SearchBar onTermSubmit={onTermSubmit} />
 		</div>
 	);
 };
