@@ -18,7 +18,7 @@ import {ReactComponent as LeftArrowIcon} from "../../assets/icons/left-arrow.svg
 import {ReactComponent as RightArrowIcon} from "../../assets/icons/right-arrow.svg";
 
 interface MonthCalendarProps {
-	onDateSelect: (dateSelected: string) => void;
+	onDateSelect: (dateSelected: Date) => void;
 }
 
 const MonthCalendar: React.FC<MonthCalendarProps> = ({onDateSelect}) => {
@@ -44,7 +44,7 @@ const MonthCalendar: React.FC<MonthCalendarProps> = ({onDateSelect}) => {
 		}
 		info.dayEl.classList.add("day-select");
 		setPrevDayEl(info.dayEl);
-		onDateSelect(info.date.toLocaleDateString());
+		onDateSelect(info.date);
 	};
 
 	const nextMonthHandler = () => {

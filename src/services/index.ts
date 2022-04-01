@@ -14,5 +14,6 @@ export * from "./reducers";
 export * from "./food";
 export * from "./nutrient";
 export * from "./record";
+export * from "./status";
 export * from "./foodselect";
 export * as actionCreators from "./action-creators";

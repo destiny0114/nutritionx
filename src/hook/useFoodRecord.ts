@@ -14,18 +14,16 @@ import {useCallback, useEffect, useState} from "react";
 import useAction from "./useAction";
 /* types */
 import {Food, FoodRecord} from "../services";
-/* util */
-import {getToday} from "../utils/common";
 
-export default function useFoodRecord(): [onDateSelect: (dateSelected: string) => void, onAddFoodRecord: (foodSelected: Food) => void] {
-	const [dateRecordSelected, setDateRecordSelected] = useState(getToday(new Date()));
+export default function useFoodRecord(): [onDateSelect: (dateSelected: Date) => void, onAddFoodRecord: (foodSelected: Food) => void] {
+	const [dateRecordSelected, setDateRecordSelected] = useState(new Date());
 	const {addFoodRecord, selectFoodRecordByDate, saveRecord} = useAction();
 
 	useEffect(() => {
 		selectFoodRecordByDate(dateRecordSelected);
 	}, [dateRecordSelected, selectFoodRecordByDate]);
 
-	const dateSelectHandler = useCallback((dateSelected: string) => {
+	const dateSelectHandler = useCallback((dateSelected: Date) => {
 		setDateRecordSelected(dateSelected);
 	}, []);
 

@@ -17,8 +17,10 @@ import {UserAction} from "../actions";
 import {Nutrient} from "../nutrient";
 import {FoodSelect} from "../foodselect";
 import {RecordCollection, FoodRecord} from "../record";
+import {Status} from "../status";
 /* utils */
-import {splitArray, getToday} from "../../utils/common";
+import {splitArray, dateFormat, getDaysbyWeek, getDates} from "../../utils/common";
+import {getAverageNutrientByRecord} from "../../utils/nutrient";
 
 const BASE_NUTRIENTS: Nutrient[] = [
 	{
@@ -207,6 +209,7 @@ const BASE_NUTRIENTS: Nutrient[] = [
 interface UserState {
 	foodSelected: FoodSelect | null;
 	foodRecordSelected: FoodRecord[];
+	weekNutritionalStatus: Status[] | null;
 	data: {
 		records: RecordCollection;
 	};
@@ -216,6 +219,7 @@ interface UserState {
 const initialState: UserState = {
 	foodSelected: null,
 	foodRecordSelected: [],
+	weekNutritionalStatus: null,
 	data: {
 		records: {},
 	},
@@ -252,6 +256,26 @@ const userReducer = (state: UserState = initialState, action: UserAction) =>
 					draft.foodRecordSelected = [];
 				}
 				return draft;
+			case ActionTypes.SELECT_FOOD_RECORD_BY_WEEK:
+				const {from, to, data} = action.payload;
+				const weekRecord = data;
+				const weekDates = getDates(from, to);
+				const result = weekDates.map((d) => {
+					if (weekRecord[dateFormat(d)]) {
+						const totalAverageByDay = getAverageNutrientByRecord(weekRecord, dateFormat(d));
+
+						return {
+							date: d.toLocaleString("en-us", {month: "short", day: "numeric"}),
+							average_nutrient: totalAverageByDay.nutrient,
+						};
+					}
+					return {
+						date: d.toLocaleString("en-us", {month: "short", day: "numeric"}),
+						average_nutrient: {},
+					};
+				});
+				draft.weekNutritionalStatus = result as Status[];
+				return draft;
 			case ActionTypes.ADD_FOOD_RECORD:
 				const {food, created_at} = action.payload;
 				const foundRecord = draft.data.records[created_at];
@@ -269,11 +293,14 @@ const userReducer = (state: UserState = initialState, action: UserAction) =>
 				draft.error = action.payload;
 				return draft;
 			case ActionTypes.LOAD_RECORDS_COMPLETE:
-				const currentDate = getToday(new Date());
+				const currentDate = dateFormat(new Date());
 				const todayRecord = action.payload.records[currentDate];
 				draft.data = action.payload;
 				if (!todayRecord) return draft;
 				draft.foodRecordSelected = action.payload.records[currentDate].items;
+				return draft;
+			case ActionTypes.LOAD_RECORDS_FAIL:
+				draft.error = action.payload;
 				return draft;
 			default:
 				return draft;

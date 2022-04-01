@@ -24,6 +24,15 @@ export interface SelectFoodRecordByDateAction {
 	payload: string;
 }
 
+export interface SelectFoodRecordByWeekAction {
+	type: typeof ActionTypes.SELECT_FOOD_RECORD_BY_WEEK;
+	payload: {
+		from: Date;
+		to: Date;
+		data: RecordCollection;
+	};
+}
+
 export interface AddFoodRecordAction {
 	type: typeof ActionTypes.ADD_FOOD_RECORD;
 	payload: {
@@ -55,4 +64,12 @@ export interface LoadRecordsFailAction {
 	payload: string;
 }
 
-export type UserAction = SelectFoodAction | SelectFoodRecordByDateAction | AddFoodRecordAction | SaveRecordCompleteAction | SaveRecordFailAction | LoadRecordsCompleteAction | LoadRecordsFailAction;
+export type UserAction =
+	| SelectFoodAction
+	| SelectFoodRecordByWeekAction
+	| SelectFoodRecordByDateAction
+	| AddFoodRecordAction
+	| SaveRecordCompleteAction
+	| SaveRecordFailAction
+	| LoadRecordsCompleteAction
+	| LoadRecordsFailAction;

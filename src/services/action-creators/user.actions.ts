@@ -27,8 +27,12 @@ import {
 	LoadRecordsCompleteAction,
 	LoadRecordsFailAction,
 	RecordData,
+	SelectFoodRecordByWeekAction,
 } from "../actions";
+/* util */
 import localDB from "../../utils/localDB";
+import {dateFormat, getDaysAgo} from "../../utils/common";
+import {filterRecordByWeek} from "../../utils/nutrient";
 
 export function selectFood(food: Food): SelectFoodAction {
 	return {
@@ -37,19 +41,47 @@ export function selectFood(food: Food): SelectFoodAction {
 	};
 }
 
-export function selectFoodRecordByDate(date: string): SelectFoodRecordByDateAction {
+export function selectFoodRecordByDate(dateSelected: Date): SelectFoodRecordByDateAction {
 	return {
 		type: ActionTypes.SELECT_FOOD_RECORD_BY_DATE,
-		payload: date,
+		payload: dateFormat(dateSelected),
 	};
 }
 
-export function addFoodRecord(record: FoodRecord, created_at: string): AddFoodRecordAction {
+export function selectFoodRecordByWeek(from: Date, to: Date, weekRecord: RecordCollection): SelectFoodRecordByWeekAction {
+	return {
+		type: ActionTypes.SELECT_FOOD_RECORD_BY_WEEK,
+		payload: {
+			from: from,
+			to: to,
+			data: weekRecord,
+		},
+	};
+}
+
+export function loadFoodRecordByLastWeek() {
+	return (dispatch: Dispatch<UserAction>, getState: () => RootState) => {
+		const {userState} = getState();
+		const {records} = userState.data;
+		const from = getDaysAgo(7);
+		const to = getDaysAgo(0);
+
+		const filteredrRecordDates = filterRecordByWeek(records, from, to);
+		const result = filteredrRecordDates.reduce((acc, curr) => {
+			acc[curr] = records[curr];
+			return acc;
+		}, {} as RecordCollection);
+
+		dispatch(selectFoodRecordByWeek(from, to, result));
+	};
+}
+
+export function addFoodRecord(record: FoodRecord, created_at: Date): AddFoodRecordAction {
 	return {
 		type: ActionTypes.ADD_FOOD_RECORD,
 		payload: {
 			food: record,
-			created_at: created_at,
+			created_at: dateFormat(created_at),
 		},
 	};
 }
@@ -67,10 +99,10 @@ export function saveRecordFail(err: string): SaveRecordFailAction {
 	};
 }
 
-export function saveRecord(dateSelected: string) {
+export function saveRecord(dateSelected: Date) {
 	return async (dispatch: Dispatch<UserAction>, getState: () => RootState) => {
 		const {userState} = getState();
-		const record = userState.data.records[dateSelected];
+		const record = userState.data.records[dateFormat(dateSelected)];
 
 		try {
 			await localDB.setItem(record.date, record);

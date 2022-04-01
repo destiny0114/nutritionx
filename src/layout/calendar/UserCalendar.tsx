@@ -13,7 +13,7 @@
 import MonthCalendar from "../../components/calendar/MonthCalendar";
 
 interface UserCalendarProps {
-	onDateSelect: (date: string) => void;
+	onDateSelect: (date: Date) => void;
 }
 
 const UserCalendar: React.FC<UserCalendarProps> = ({onDateSelect}) => {

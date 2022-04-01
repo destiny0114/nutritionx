@@ -23,7 +23,7 @@ const Navigation: React.FC = () => {
 
 	useEffect(() => {
 		loadRecords();
-	}, [loadRecords]);
+	}, []);
 
 	return (
 		<nav className="navigation w-20 shadow-2xl flex-none">
