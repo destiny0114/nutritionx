@@ -75,7 +75,7 @@ export function getDaysbyWeek(weekAgo: number) {
 	return weekDays;
 }
 
-export function getDates(from: Date, to: Date) {
+export function weekDates(from: Date, to: Date) {
 	const diffDays = daysDiffrence(from, to);
 
 	let datesArray: Date[] = new Array();
@@ -99,6 +99,12 @@ export function getDaysAgo(numOfDays: number) {
 	daysAgo.setHours(0, 0, 0, 0);
 
 	return daysAgo;
+}
+
+export function datesBetween(daysAgo: number, daysLater: number) {
+	const from = getDaysAgo(daysAgo);
+	const end = getDaysAgo(daysLater);
+	return [from, end];
 }
 
 export type Modify<T, R> = Omit<T, keyof R> & R;

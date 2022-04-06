@@ -13,5 +13,5 @@ import {FoodRecord} from "./record";
 
 export interface Status {
 	date: string;
-	average_nutrient: Omit<FoodRecord, "food_name">;
+	nutrient_consume: FoodRecord["nutrient"];
 }

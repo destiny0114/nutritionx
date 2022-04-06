@@ -13,20 +13,20 @@ import {Dispatch, Middleware} from "redux";
 import {ActionTypes} from "../types";
 import {UserAction} from "../actions";
 import {RootState} from "../reducers";
-import {saveRecord, loadFoodRecordByLastWeek} from "../action-creators";
+import {saveRecord} from "../action-creators";
 
 export const persistMiddleware: Middleware<Dispatch<UserAction>, RootState> = ({dispatch, getState}) => {
 	return (next: (action: UserAction) => void) => {
 		return async (action: UserAction) => {
 			next(action);
 
-			if (ActionTypes.LOAD_RECORDS_COMPLETE === action.type) {
-				try {
-					loadFoodRecordByLastWeek()(dispatch, getState);
-				} catch (err) {
-					console.log(err);
-				}
-			}
+			// if (ActionTypes.LOAD_RECORDS_COMPLETE === action.type) {
+			// 	try {
+			// 		loadFoodRecordByLastWeek()(dispatch, getState);
+			// 	} catch (err) {
+			// 		console.log(err);
+			// 	}
+			// }
 		};
 	};
 };

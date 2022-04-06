@@ -9,31 +9,49 @@
  * MIT License
  * Copyright (c) 2021 Keena Levine
  */
+import {useCallback, useEffect, useState} from "react";
 /* ui */
 import Button from "../../components/ui/Button";
 import Dropdown from "../../components/ui/Dropdown";
 /* icons */
 import {ReactComponent as DropdownIcon} from "../../assets/icons/dropdown.svg";
 import {ReactComponent as AddIcon} from "../../assets/icons/add.svg";
-import {getDaysAgo} from "../../utils/common";
+/* util */
+import {datesBetween, sameDay} from "../../utils/common";
 
 interface FeatureBarProps {
 	onNavigateTo: (pathname: string) => void;
-	isDropdownActive: boolean;
-	onToggleDropdown: (isActive: boolean) => void;
-	onFilterRecord: (from: Date, to: Date) => void;
+	onFilterRecord: (dates: Date[]) => void;
 }
 
-const FeatureBar: React.FC<FeatureBarProps> = ({onNavigateTo, isDropdownActive, onToggleDropdown, onFilterRecord}) => {
+const FeatureBar: React.FC<FeatureBarProps> = ({onNavigateTo, onFilterRecord}) => {
+	const [datesSelected, setDatesSelected] = useState<Date[]>([]);
+	const [toggleDropdown, setToggleDropdown] = useState(false);
+
+	useEffect(() => {
+		if (!datesSelected.length) return;
+		onFilterRecord(datesSelected);
+	}, [datesSelected, onFilterRecord]);
+
 	const onButtonClicked = () => onNavigateTo("/dashboard");
 
-	const onFilterButtonClicked = (daysAgo: number, daysLater: number) => {
-		const from = getDaysAgo(daysAgo);
-		const to = getDaysAgo(daysLater);
+	const onFilterButtonClicked = useCallback(
+		(dates: Date[]) => {
+			if (datesSelected.length && sameDay(dates[0], datesSelected[0]) && sameDay(dates[1], datesSelected[1])) return;
 
-		onFilterRecord(from, to);
-		onToggleDropdown(false);
-	};
+			setDatesSelected(dates);
+			setToggleDropdown(false);
+		},
+		[datesSelected]
+	);
+
+	// const handleClickDay = (date?: Date[]) => {
+	// 	if (date?.[0] && active?.[0] && sameDay(date[0], active[0])) return;
+	// 	console.log("not same");
+
+	// 	setActive(date || []);
+	// 	onToggleDropdown(false);
+	// };
 
 	return (
 		<div className="flex items-start justify-between">
@@ -45,10 +63,10 @@ const FeatureBar: React.FC<FeatureBarProps> = ({onNavigateTo, isDropdownActive, 
 					text="Add Food"
 					onClick={onButtonClicked}
 				/>
-				<Dropdown icon={<DropdownIcon className="mr-3 w-4 h-4 2xl:w-7 2xl:h-7" />} isDropdownActive={isDropdownActive} onToggleDropdown={onToggleDropdown}>
-					<Button className="dropdown-item hover:bg-purple-500 py-3 px-5 2xl:text-3xl" text="Last Week" onClick={() => onFilterButtonClicked(7, 0)} />
-					<Button className="dropdown-item hover:bg-purple-500 py-3 px-5 2xl:text-3xl" text="Last 2 Week" onClick={() => onFilterButtonClicked(14, 7)} />
-					<Button className="dropdown-item hover:bg-purple-500 py-3 px-5 2xl:text-3xl" text="Last 3 Week" onClick={() => onFilterButtonClicked(21, 14)} />
+				<Dropdown icon={<DropdownIcon className="mr-3 w-4 h-4 2xl:w-7 2xl:h-7" />} isDropdownActive={toggleDropdown} onToggleDropdown={() => setToggleDropdown(!toggleDropdown)}>
+					<Button className="dropdown-item hover:bg-purple-500 py-3 px-5 2xl:text-3xl" text="Last Week" onClick={() => onFilterButtonClicked(datesBetween(7, 0))} />
+					<Button className="dropdown-item hover:bg-purple-500 py-3 px-5 2xl:text-3xl" text="Last 2 Week" onClick={() => onFilterButtonClicked(datesBetween(14, 7))} />
+					<Button className="dropdown-item hover:bg-purple-500 py-3 px-5 2xl:text-3xl" text="Last 3 Week" onClick={() => onFilterButtonClicked(datesBetween(21, 14))} />
 				</Dropdown>
 			</div>
 		</div>

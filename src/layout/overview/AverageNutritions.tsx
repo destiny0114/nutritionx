@@ -16,6 +16,10 @@ import {ReactComponent as CaloriesIcon} from "../../assets/icons/calories.svg";
 import {ReactComponent as CarbIcon} from "../../assets/icons/carb.svg";
 import {ReactComponent as ProteinIcon} from "../../assets/icons/protein.svg";
 import {ReactComponent as FatIcon} from "../../assets/icons/fat.svg";
+import {Status} from "../../services";
+import {sumAvgNutritionByWeek} from "../../utils/nutrient";
+import {useMemo} from "react";
+import React from "react";
 // future will move to other place
 interface AverageNutritionProps {
 	title: string;
@@ -51,7 +55,21 @@ const AverageNutritionList: AverageNutritionProps[] = [
 	},
 ];
 
-const AverageNutritions: React.FC<{}> = () => {
+interface AverageNutritionsProps {
+	weekStatusData: Status[];
+}
+
+const AverageNutritions: React.FC<AverageNutritionsProps> = ({weekStatusData}) => {
+	const icons: React.ReactNode[] = [
+		<CaloriesIcon className="w-16 h-16 2xl:w-28 2xl:h-28" />,
+		<CarbIcon className="w-16 h-16 2xl:w-28 2xl:h-28" />,
+		<ProteinIcon className="w-16 h-16 2xl:w-28 2xl:h-28" />,
+		<FatIcon className="w-16 h-16 2xl:w-28 2xl:h-28" />,
+	];
+
+	// const totalAvgNutrition = useMemo(() => sumAvgNutritionByWeek(weekStatusData), [weekStatusData]);
+	console.log("rendered");
+
 	return (
 		<div className="flex-none h-2/5 grid grid-cols-4 grid-rows-none gap-4">
 			{AverageNutritionList.map((props, index) => (
@@ -61,4 +79,4 @@ const AverageNutritions: React.FC<{}> = () => {
 	);
 };
 
-export default AverageNutritions;
+export default React.memo(AverageNutritions);

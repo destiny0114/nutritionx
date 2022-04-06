@@ -9,7 +9,7 @@
  * MIT License
  * Copyright (c) 2022 Keena Levine
  */
-import {Food, FoodRecord, RecordCollection} from "../services";
+import {Food, FoodRecord, RecordCollection, Status} from "../services";
 import {dateFormat} from "./common";
 
 type NutrientList = Pick<Food["full_nutrients"][number], "attr_id" | "value">[];
@@ -31,9 +31,31 @@ export function filterRecordByWeek(records: RecordCollection, from: Date, to: Da
 	return Object.keys(records).filter(isSevenDaysOld);
 }
 
-export function getAverageNutrientByRecord(records: RecordCollection, dateIndex: string) {
+export function getTotalNutrientConsumeByEachDay(weekDates: Date[], records: RecordCollection) {
+	return weekDates.map((d) => {
+		if (records[dateFormat(d)]) {
+			const totalNutrientByDay = getTotalNutrientByDay(records, dateFormat(d));
+
+			return {
+				date: d.toLocaleString("en-us", {month: "short", day: "numeric"}),
+				nutrient_consume: totalNutrientByDay,
+			};
+		}
+		return {
+			date: d.toLocaleString("en-us", {month: "short", day: "numeric"}),
+			nutrient_consume: {
+				calories: 0,
+				carbs: 0,
+				proteins: 0,
+				fats: 0,
+			},
+		};
+	});
+}
+
+export function getTotalNutrientByDay(records: RecordCollection, dateIndex: string) {
 	const recordItems = records[dateIndex].items;
-	const result = recordItems.reduce((prev, next) => {
+	const sumRecordNutrient = recordItems.reduce((prev, next) => {
 		if (!Object.keys(prev).length) return next;
 
 		const average_calories = Math.round(prev.nutrient.calories + next.nutrient.calories);
@@ -49,7 +71,30 @@ export function getAverageNutrientByRecord(records: RecordCollection, dateIndex:
 				fats: average_fats,
 			},
 		};
-	}, {} as Omit<FoodRecord, "food_name">);
+	}, {} as Pick<FoodRecord, "nutrient">);
 
-	return result;
+	return sumRecordNutrient.nutrient;
+}
+
+export function sumAvgNutritionByWeek(weekStatusData: Status[] | null) {
+	if (!weekStatusData || typeof weekStatusData === undefined) return;
+
+	return weekStatusData
+		.map((item) => item.nutrient_consume)
+		.reduce((prev, next) => {
+			if (!Object.keys(prev).length || typeof prev === undefined) return next;
+
+			const average_calories = prev.calories + (next.calories ?? 0);
+			// const average_carbs = prev.average_nutrient.carbs + next.average_nutrient.carbs;
+			// const average_proteins = prev.average_nutrient.proteins + next.average_nutrient.proteins;
+			// const average_fats = prev.average_nutrient.fats + next.average_nutrient.fats;
+			//console.log(average_calories);
+
+			return {
+				calories: average_calories,
+				carbs: 0,
+				proteins: 0,
+				fats: 0,
+			};
+		}, {} as Status["nutrient_consume"]);
 }

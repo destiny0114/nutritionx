@@ -9,7 +9,7 @@
  * MIT License
  * Copyright (c) 2021 Keena Levine
  */
-import React, {useState, useEffect, useRef, useCallback} from "react";
+import React, {useState, useEffect, useRef, useCallback, useMemo} from "react";
 import {useHistory} from "react-router";
 /* layout */
 import AverageNutritions from "../layout/overview/AverageNutritions";
@@ -21,9 +21,9 @@ import TodayNutritionsMonitor from "../layout/overview/TodayNutritionsMonitor";
 import useWindowDimensions from "../hook/useWindowDimensions";
 import useAction from "../hook/useAction";
 import {useTypedSelector} from "../hook/useTypedSelector";
-import {filterRecordByWeek} from "../utils/nutrient";
-import {RecordCollection} from "../services";
-import {sameDay} from "../utils/common";
+import {filterRecordByWeek, getTotalNutrientConsumeByEachDay} from "../utils/nutrient";
+import {RecordCollection, Status} from "../services";
+import {sameDay, weekDates, datesBetween} from "../utils/common";
 
 interface DummyData {
 	nutritions: {
@@ -109,74 +109,59 @@ const usePrevious = <T extends unknown>(value: T): T | undefined => {
 };
 
 const Overview: React.FC<{}> = () => {
-	const [toggleDropdown, setToggleDropdown] = useState(false);
-	const [from, setFrom] = useState<Date | null>(null);
-	const [to, setTo] = useState<Date | null>(null);
+	const [weekRecord, setWeekRecord] = useState<Status[]>([]);
 	const dimension = useWindowDimensions();
 	const history = useHistory();
-	const prevState = useRef<Date>();
 
-	const recordList = useTypedSelector(({userState: {data}}) => data.records);
-
-	const {loadRecords, selectFoodRecordByWeek} = useAction();
+	const recordList = useTypedSelector(({userState}) => userState.data.records);
 
 	const responsive = {
 		desktop: dimension.width > 1536,
 	};
 
+	const computeWeekRecord = useMemo(
+		() => (datesSelected: Date[]) => {
+			const [from, to] = datesSelected;
+			const filteredrRecordDates = filterRecordByWeek(recordList, from, to);
+			const weekRecord = filteredrRecordDates.reduce((acc, curr) => {
+				acc[curr] = recordList[curr];
+				return acc;
+			}, {} as RecordCollection);
+			const weekRecordWithTotalNutrient = getTotalNutrientConsumeByEachDay(weekDates(from, to), weekRecord);
+
+			return weekRecordWithTotalNutrient as Status[];
+		},
+		[recordList]
+	);
+
 	useEffect(() => {
-		//selectFoodRecordByWeek(new Date());
 		calculateCalories(dummyData[0].nutritions);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	useEffect(() => {
-		if (!from || !to) return;
-		if (!Object.keys(recordList).length) return;
-		console.log(from);
-		const filteredrRecordDates = filterRecordByWeek(recordList, from, to);
-		const result = filteredrRecordDates.reduce((acc, curr) => {
-			acc[curr] = recordList[curr];
-			return acc;
-		}, {} as RecordCollection);
-
-		selectFoodRecordByWeek(from, to, result);
-	}, [from, to, recordList, selectFoodRecordByWeek]);
+		const weekRecord = computeWeekRecord(datesBetween(7, 0));
+		setWeekRecord(weekRecord);
+	}, [computeWeekRecord, recordList]);
 
 	const handleNavigateTo = (pathname: string) => history.push(pathname);
 
-	const handleToggleDropdownMenu = (isActive: boolean) => setToggleDropdown(isActive);
+	const handleFillerRecordByWeek = useCallback(
+		(datesSelected: Date[]) => {
+			console.log(datesSelected);
 
-	const checkFromSameDay = useCallback(
-		(fromSelected: Date) => {
-			// still cant get from dates that is updated
-			console.log(from);
-			if (from && sameDay(from, fromSelected)) return;
-			setFrom(fromSelected);
+			const weekRecord = computeWeekRecord(datesSelected);
+			setWeekRecord(weekRecord);
 		},
-		[from]
+		[computeWeekRecord]
 	);
-
-	const checkToSameDay = useCallback(
-		(toSelected: Date) => {
-			// still cant get to dates that is updated
-			if (to && sameDay(to, toSelected)) return;
-			setFrom(toSelected);
-		},
-		[to]
-	);
-
-	const handleFillerRecordByWeek = (fromSelected: Date, toSelected: Date) => {
-		checkFromSameDay(fromSelected);
-		checkToSameDay(toSelected);
-	};
 
 	return (
 		<div className="overview flex w-full space-x-6 select-none">
 			<div className="flex-auto">
 				<div className="flex space-y-4 w-full h-full flex-col">
-					<FeatureBar onNavigateTo={handleNavigateTo} isDropdownActive={toggleDropdown} onToggleDropdown={handleToggleDropdownMenu} onFilterRecord={handleFillerRecordByWeek} />
-					<AverageNutritions />
+					<FeatureBar onNavigateTo={handleNavigateTo} onFilterRecord={handleFillerRecordByWeek} />
+					<AverageNutritions weekStatusData={weekRecord} />
 					<WeekNutritionsMonitor data={dummyData} desktop={responsive.desktop} />
 				</div>
 			</div>
@@ -191,3 +176,6 @@ const Overview: React.FC<{}> = () => {
 };
 
 export default Overview;
+function daysBetween(arg0: number, arg1: number): Date[] {
+	throw new Error("Function not implemented.");
+}
