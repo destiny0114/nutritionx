@@ -10,7 +10,7 @@
  * Copyright (c) 2022 Keena Levine
  */
 import {Food, FoodRecord, RecordCollection, Status} from "../services";
-import {dateFormat} from "./common";
+import {dateFormat, weekDates} from "./common";
 
 type NutrientList = Pick<Food["full_nutrients"][number], "attr_id" | "value">[];
 
@@ -22,11 +22,15 @@ export function findNutrientById(nutrientList: NutrientList, attr_id: number, fo
 	return formatter(nutrient);
 }
 
-export function filterRecordByWeek(records: RecordCollection, from: Date, to: Date) {
-	const isSevenDaysOld = function (obj: string) {
-		let myDate = Array.from(obj.split("/"), Number);
-		let recordDate = new Date(myDate[2], myDate[1] - 1, myDate[0]);
-		return recordDate.getTime() >= from.getTime() && recordDate.getTime() <= to.getTime();
+export function filterRecordByWeek(records: RecordCollection, from: string, to: string) {
+	const fromStrParts = Array.from(from.split("/"), Number);
+	const toStrParts = Array.from(to.split("/"), Number);
+	const fromDate = new Date(fromStrParts[2], fromStrParts[1] - 1, fromStrParts[0]);
+	const toDate = new Date(toStrParts[2], toStrParts[1] - 1, toStrParts[0]);
+	const isSevenDaysOld = function (dates: string) {
+		let newDates = Array.from(dates.split("/"), Number);
+		let recordDate = new Date(newDates[2], newDates[1] - 1, newDates[0]);
+		return recordDate.getTime() >= fromDate.getTime() && recordDate.getTime() <= toDate.getTime();
 	};
 	return Object.keys(records).filter(isSevenDaysOld);
 }
@@ -35,6 +39,7 @@ export function getTotalNutrientConsumeByEachDay(weekDates: Date[], records: Rec
 	return weekDates.map((d) => {
 		if (records[dateFormat(d)]) {
 			const totalNutrientByDay = getTotalNutrientByDay(records, dateFormat(d));
+			console.log(totalNutrientByDay);
 
 			return {
 				date: d.toLocaleString("en-us", {month: "short", day: "numeric"}),
@@ -76,25 +81,95 @@ export function getTotalNutrientByDay(records: RecordCollection, dateIndex: stri
 	return sumRecordNutrient.nutrient;
 }
 
-export function sumAvgNutritionByWeek(weekStatusData: Status[] | null) {
-	if (!weekStatusData || typeof weekStatusData === undefined) return;
-
-	return weekStatusData
-		.map((item) => item.nutrient_consume)
-		.reduce((prev, next) => {
-			if (!Object.keys(prev).length || typeof prev === undefined) return next;
-
-			const average_calories = prev.calories + (next.calories ?? 0);
-			// const average_carbs = prev.average_nutrient.carbs + next.average_nutrient.carbs;
-			// const average_proteins = prev.average_nutrient.proteins + next.average_nutrient.proteins;
-			// const average_fats = prev.average_nutrient.fats + next.average_nutrient.fats;
-			//console.log(average_calories);
+export function getWeekRecordBetweenDate(records: RecordCollection, datesBetween: string[]) {
+	const [from, to] = datesBetween;
+	const filteredRecordDates = filterRecordByWeek(records, from, to);
+	const weekRecord = filteredRecordDates.reduce((acc, curr) => {
+		acc[curr] = records[curr];
+		return acc;
+	}, {} as RecordCollection);
+	const result = weekDates(from, to).map((d) => {
+		if (weekRecord[dateFormat(d)]) {
+			const totalNutrientByDay = getTotalNutrientByDay(weekRecord, dateFormat(d));
 
 			return {
-				calories: average_calories,
+				date: d.toLocaleString("en-us", {month: "short", day: "numeric"}),
+				nutrient_consume: totalNutrientByDay,
+			};
+		}
+		return {
+			date: d.toLocaleString("en-us", {month: "short", day: "numeric"}),
+			nutrient_consume: {
+				calories: 0,
 				carbs: 0,
 				proteins: 0,
 				fats: 0,
+			},
+		};
+	});
+	return result as Status[];
+}
+
+export function sumAvgNutritionByWeek(weekStatusData: Status[]) {
+	let average_calories = 0;
+	let average_carbs = 0;
+	let average_proteins = 0;
+	let average_fats = 0;
+
+	const {nutrient_consume} = weekStatusData.reduce((prev, next) => {
+		if (!Object.keys(prev).length || typeof prev === undefined) return next;
+		average_calories = prev.nutrient_consume.calories + next.nutrient_consume.calories;
+		average_carbs = prev.nutrient_consume.carbs + next.nutrient_consume.carbs;
+		average_proteins = prev.nutrient_consume.proteins + next.nutrient_consume.proteins;
+		average_fats = prev.nutrient_consume.fats + next.nutrient_consume.fats;
+
+		return {
+			nutrient_consume: {
+				calories: average_calories,
+				carbs: average_carbs,
+				proteins: average_fats,
+				fats: average_proteins,
+			},
+		};
+	}, {} as Omit<Status, "date">);
+
+	return nutrient_consume;
+}
+
+export function getTodayRecord(records: RecordCollection) {
+	const todayRecord = records[dateFormat(new Date())] ?? null;
+
+	let average_calories = 0;
+	let average_carbs = 0;
+	let average_proteins = 0;
+	let average_fats = 0;
+
+	if (todayRecord) {
+		const {items} = todayRecord;
+		const todayStatus = items.reduce((prev, next) => {
+			if (!Object.keys(prev).length || typeof prev === undefined) return next;
+			average_calories = prev.nutrient.calories + next.nutrient.calories;
+			average_carbs = prev.nutrient.carbs + next.nutrient.carbs;
+			average_proteins = prev.nutrient.proteins + next.nutrient.proteins;
+			average_fats = prev.nutrient.fats + next.nutrient.fats;
+
+			return {
+				nutrient: {
+					calories: average_calories,
+					carbs: average_carbs,
+					proteins: average_fats,
+					fats: average_proteins,
+				},
 			};
-		}, {} as Status["nutrient_consume"]);
+		}, {} as Omit<FoodRecord, "food_name">);
+
+		return todayStatus.nutrient as FoodRecord["nutrient"];
+	}
+
+	return {
+		calories: average_calories,
+		carbs: average_carbs,
+		proteins: average_fats,
+		fats: average_proteins,
+	};
 }

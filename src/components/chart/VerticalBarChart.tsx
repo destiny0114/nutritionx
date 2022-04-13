@@ -13,9 +13,11 @@ import {Bar, BarChart, LabelList, LabelProps, ResponsiveContainer, XAxis, XAxisP
 import {CategoricalChartProps} from "recharts/types/chart/generateCategoricalChart";
 import {Props as BarProps} from "recharts/types/cartesian/Bar";
 import {Props as RectangleProps} from "recharts/types/shape/Rectangle";
+/* types */
+import {FoodRecord} from "../../services";
 
 interface VerticalBarChartProps {
-	data: any[];
+	data: FoodRecord["nutrient"] | undefined;
 	desktop: boolean;
 }
 
@@ -24,7 +26,7 @@ interface CustomLabelListProps extends LabelProps {
 	desktop: boolean;
 }
 
-const calculateHeight = (y: number, height: number) => y - height;
+const calculateHeight = (y: number, height: number) => y - height * 1.5;
 
 const CustomizedLabel: React.FC<CustomLabelListProps> = (props) => {
 	const {name, y, height, value, desktop} = props;
@@ -35,7 +37,7 @@ const CustomizedLabel: React.FC<CustomLabelListProps> = (props) => {
 				{`${name}`}
 			</text>
 			<text x="100%" y={calculateHeight(y as number, height as number)} fill="#fff" fontFamily="poppins" fontSize={desktop ? 23 : 15} textAnchor="end" dominantBaseline="middle">
-				{`${value}`}
+				{`${Math.round(value as number)} ${name.toLowerCase() === "calories" ? "kcal" : "g"}`}
 			</text>
 		</g>
 	);
@@ -49,58 +51,59 @@ const CustomizedBackground: React.FC<RectangleProps> = (props) => {
 
 const VerticalBarChart: React.FC<VerticalBarChartProps> = ({data, desktop}) => {
 	const barChartProps: CategoricalChartProps = {
-		data: data,
+		data: [data],
 		layout: "vertical",
 		barSize: desktop ? 12 : 8,
 		barGap: desktop ? 70 : 45,
 		margin: {
-			top: 20,
+			top: 15,
 		},
 	};
 
 	const xAxisProps: XAxisProps = {
 		type: "number",
 		hide: true,
+		domain: [0, 2000],
 	};
 
 	const yAxisProps: YAxisProps = {
 		type: "category",
-		dataKey: "nutritions",
+		dataKey: "data",
 		hide: true,
 	};
 
 	const verticalBarProps: Omit<BarProps, "ref">[] = [
 		{
 			name: "Calories",
-			dataKey: "nutritions.calories",
+			dataKey: "calories",
 			fill: "url(#calories-v-gradient)",
 			radius: 25,
 			background: <CustomizedBackground />,
-			children: <LabelList dataKey="nutritions.calories" content={<CustomizedLabel name="Calories" desktop={desktop} />} />,
+			children: <LabelList dataKey="calories" content={<CustomizedLabel name="Calories" desktop={desktop} />} />,
 		},
 		{
 			name: "Carbs",
-			dataKey: "nutritions.carbs",
+			dataKey: "carbs",
 			fill: "url(#carbs-v-gradient)",
 			radius: 25,
 			background: <CustomizedBackground />,
-			children: <LabelList dataKey="nutritions.carbs" content={<CustomizedLabel name="Carbs" desktop={desktop} />} />,
+			children: <LabelList dataKey="carbs" content={<CustomizedLabel name="Carbs" desktop={desktop} />} />,
 		},
 		{
 			name: "Proteins",
-			dataKey: "nutritions.proteins",
+			dataKey: "proteins",
 			fill: "url(#proteins-v-gradient)",
 			radius: 25,
 			background: <CustomizedBackground />,
-			children: <LabelList dataKey="nutritions.proteins" content={<CustomizedLabel name="Proteins" desktop={desktop} />} />,
+			children: <LabelList dataKey="proteins" content={<CustomizedLabel name="Proteins" desktop={desktop} />} />,
 		},
 		{
 			name: "Fats",
-			dataKey: "nutritions.fats",
+			dataKey: "fats",
 			fill: "url(#fats-v-gradient)",
 			radius: 25,
 			background: <CustomizedBackground />,
-			children: <LabelList dataKey="nutritions.fats" content={<CustomizedLabel name="Fats" desktop={desktop} />} />,
+			children: <LabelList dataKey="fats" content={<CustomizedLabel name="Fats" desktop={desktop} />} />,
 		},
 	];
 

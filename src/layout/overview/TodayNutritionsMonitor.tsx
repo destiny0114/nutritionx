@@ -11,9 +11,11 @@
  */
 /* component */
 import VerticalBarChart from "../../components/chart/VerticalBarChart";
+/* types */
+import {FoodRecord} from "../../services";
 
 interface TodayNutritionsMonitorProps {
-	data: any[];
+	data: FoodRecord["nutrient"];
 	desktop: boolean;
 }
 

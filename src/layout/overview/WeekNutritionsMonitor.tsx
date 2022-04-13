@@ -11,18 +11,20 @@
  */
 /* component */
 import StackedBarChart from "../../components/chart/StackedBarChart";
+/* types */
+import {Status} from "../../services";
 
 interface WeekNutritionsMonitorProps {
-	data: any;
+	weekStatusData: Status[];
 	desktop: boolean;
 }
 
-const WeekNutritionsMonitor: React.FC<WeekNutritionsMonitorProps> = ({data, desktop}) => {
+const WeekNutritionsMonitor: React.FC<WeekNutritionsMonitorProps> = ({weekStatusData, desktop}) => {
 	return (
 		<div className="flex-auto bg-medium-slate-blue shadow-lg rounded-2xl">
 			<div className="barchart-wrapper relative py-4 px-8 w-full h-full">
 				<h1 className="y-axis-title font-poppins text-white 2xl:text-2xl">Calories</h1>
-				<StackedBarChart data={data} desktop={desktop} />
+				<StackedBarChart data={weekStatusData} desktop={desktop} />
 			</div>
 		</div>
 	);

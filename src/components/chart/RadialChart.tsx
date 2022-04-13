@@ -12,14 +12,16 @@
 import {ResponsiveContainer, RadialBarChart, RadialBar, PolarAngleAxis, PolarAngleAxisProps} from "recharts";
 import {CategoricalChartProps} from "recharts/types/chart/generateCategoricalChart";
 import {Props as RadialBarProps} from "recharts/types/polar/RadialBar";
+/* types */
+import {FoodRecord} from "../../services";
 
 interface RadialChartProps {
-	data: any;
+	data: FoodRecord["nutrient"] | undefined;
 }
 
 const RadialChart: React.FC<RadialChartProps> = ({data}) => {
 	const radialBarChartProps: CategoricalChartProps = {
-		data: data,
+		data: [data],
 		innerRadius: "72%",
 		outerRadius: "85%",
 		startAngle: 230,
@@ -37,7 +39,7 @@ const RadialChart: React.FC<RadialChartProps> = ({data}) => {
 		fill: "url(#total-calories-gradient)",
 		cornerRadius: 50,
 		background: {opacity: 0.5},
-		dataKey: "value",
+		dataKey: "calories",
 		angleAxisId: 0,
 	};
 

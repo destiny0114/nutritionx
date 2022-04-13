@@ -19,7 +19,8 @@ import {FoodSelect} from "../foodselect";
 import {RecordCollection, FoodRecord} from "../record";
 import {Status} from "../status";
 /* utils */
-import {splitArray, dateFormat} from "../../utils/common";
+import {splitArray, dateFormat, weekDates} from "../../utils/common";
+import {filterRecordByWeek, getTotalNutrientByDay} from "../../utils/nutrient";
 
 const BASE_NUTRIENTS: Nutrient[] = [
 	{
@@ -254,6 +255,36 @@ const userReducer = (state: UserState = initialState, action: UserAction) =>
 				} else {
 					draft.foodRecordSelected = [];
 				}
+				return draft;
+			case ActionTypes.SELECT_FOOD_RECORD_BY_WEEK:
+				const {dates, data} = action.payload;
+				const [from, to] = dates;
+				const filteredRecordDates = filterRecordByWeek(data, from, to);
+				const weekRecord = filteredRecordDates.reduce((acc, curr) => {
+					acc[curr] = data[curr];
+					return acc;
+				}, {} as RecordCollection);
+
+				const result = weekDates(from, to).map((d) => {
+					if (weekRecord[dateFormat(d)]) {
+						const totalNutrientByDay = getTotalNutrientByDay(weekRecord, dateFormat(d));
+
+						return {
+							date: d.toLocaleString("en-us", {month: "short", day: "numeric"}),
+							nutrient_consume: totalNutrientByDay,
+						};
+					}
+					return {
+						date: d.toLocaleString("en-us", {month: "short", day: "numeric"}),
+						nutrient_consume: {
+							calories: 0,
+							carbs: 0,
+							proteins: 0,
+							fats: 0,
+						},
+					};
+				});
+				draft.weekNutritionalStatus = result as Status[];
 				return draft;
 			case ActionTypes.ADD_FOOD_RECORD:
 				const {food, created_at} = action.payload;

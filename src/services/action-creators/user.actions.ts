@@ -27,10 +27,12 @@ import {
 	LoadRecordsCompleteAction,
 	LoadRecordsFailAction,
 	RecordData,
+	SelectFoodRecordByWeekAction,
 } from "../actions";
 /* util */
 import localDB from "../../utils/localDB";
-import {dateFormat} from "../../utils/common";
+import {dateFormat, getDaysAgo} from "../../utils/common";
+import {filterRecordByWeek} from "../../utils/nutrient";
 
 export function selectFood(food: Food): SelectFoodAction {
 	return {
@@ -45,6 +47,33 @@ export function selectFoodRecordByDate(dateSelected: Date): SelectFoodRecordByDa
 		payload: dateFormat(dateSelected),
 	};
 }
+
+export function selectFoodRecordByWeek(datesSelected: string[], weekRecord: RecordCollection): SelectFoodRecordByWeekAction {
+	return {
+		type: ActionTypes.SELECT_FOOD_RECORD_BY_WEEK,
+		payload: {
+			dates: datesSelected,
+			data: weekRecord,
+		},
+	};
+}
+
+// export function loadFoodRecordByLastWeek() {
+// 	return (dispatch: Dispatch<UserAction>, getState: () => RootState) => {
+// 		const {userState} = getState();
+// 		const {records} = userState.data;
+// 		const from = getDaysAgo(7);
+// 		const to = getDaysAgo(0);
+
+// 		const filteredrRecordDates = filterRecordByWeek(records, from, to);
+// 		const result = filteredrRecordDates.reduce((acc, curr) => {
+// 			acc[curr] = records[curr];
+// 			return acc;
+// 		}, {} as RecordCollection);
+
+// 		dispatch(selectFoodRecordByWeek(from, to, result));
+// 	};
+// }
 
 export function addFoodRecord(record: FoodRecord, created_at: Date): AddFoodRecordAction {
 	return {

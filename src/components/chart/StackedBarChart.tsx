@@ -14,9 +14,11 @@ import {Props as BarProps} from "recharts/types/cartesian/Bar";
 import {CategoricalChartProps} from "recharts/types/chart/generateCategoricalChart";
 /* hook */
 import useHover from "../../hook/useHover";
+/* types */
+import {Status} from "../../services";
 
 interface StackBarChartProps {
-	data: any[];
+	data: Status[];
 	desktop: boolean;
 }
 
@@ -72,7 +74,7 @@ const StackedBarChart: React.FC<StackBarChartProps> = ({data, desktop}) => {
 	const stackBarProps: Omit<BarProps, "ref">[] = [
 		{
 			name: "Carbs",
-			dataKey: "nutritions.carbs",
+			dataKey: "nutrient_consume.carbs",
 			stackId: "a",
 			fill: "url(#carbs-h-gradient)",
 			radius: [0, 0, 25, 25],
@@ -80,7 +82,7 @@ const StackedBarChart: React.FC<StackBarChartProps> = ({data, desktop}) => {
 		},
 		{
 			name: "Proteins",
-			dataKey: "nutritions.proteins",
+			dataKey: "nutrient_consume.proteins",
 			stackId: "a",
 			fill: "url(#proteins-h-gradient)",
 			radius: undefined,
@@ -88,7 +90,7 @@ const StackedBarChart: React.FC<StackBarChartProps> = ({data, desktop}) => {
 		},
 		{
 			name: "Fats",
-			dataKey: "nutritions.fats",
+			dataKey: "nutrient_consume.fats",
 			stackId: "a",
 			fill: "url(#fats-h-gradient)",
 			radius: [25, 25, 0, 0],

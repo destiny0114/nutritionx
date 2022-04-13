@@ -45,8 +45,8 @@ export function dateFormat(inputDate: Date) {
 	return dd + "/" + mm + "/" + yyyy;
 }
 
-export function sameDay(date1: Date, date2: Date) {
-	return date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth() && date1.getDate() === date2.getDate();
+export function sameDay(date1: string, date2: string) {
+	return date1 === date2;
 }
 
 export function daysDiffrence(date1: Date, date2: Date) {
@@ -75,12 +75,19 @@ export function getDaysbyWeek(weekAgo: number) {
 	return weekDays;
 }
 
-export function weekDates(from: Date, to: Date) {
-	const diffDays = daysDiffrence(from, to);
+export function weekDates(from: string, to: string) {
+	const fromStrParts = Array.from(from.split("/"), Number);
+	const toStrParts = Array.from(to.split("/"), Number);
+	const fromDate = new Date(fromStrParts[2], fromStrParts[1] - 1, fromStrParts[0]);
+	const toDate = new Date(toStrParts[2], toStrParts[1] - 1, toStrParts[0]);
+	console.log(fromDate);
+	console.log(toDate);
+
+	const diffDays = daysDiffrence(fromDate, toDate);
 
 	let datesArray: Date[] = new Array();
 	let day: Date;
-	let currentDate = from;
+	let currentDate = fromDate;
 
 	for (let i = 0; i < diffDays; i++) {
 		currentDate.setDate(currentDate.getDate() + 1);
@@ -91,20 +98,15 @@ export function weekDates(from: Date, to: Date) {
 }
 
 export function getDaysAgo(numOfDays: number) {
-	const today = new Date();
-	const daysAgo = new Date(today.getTime());
-
-	daysAgo.setDate(today.getDate() - numOfDays);
-
-	daysAgo.setHours(0, 0, 0, 0);
-
-	return daysAgo;
+	const start = new Date();
+	start.setTime(start.getTime() - 3600 * 1000 * 24 * numOfDays);
+	return dateFormat(start);
 }
 
 export function datesBetween(daysAgo: number, daysLater: number) {
 	const from = getDaysAgo(daysAgo);
-	const end = getDaysAgo(daysLater);
-	return [from, end];
+	const to = getDaysAgo(daysLater);
+	return [from, to];
 }
 
 export type Modify<T, R> = Omit<T, keyof R> & R;

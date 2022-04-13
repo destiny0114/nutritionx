@@ -14,9 +14,11 @@ import RadialChart from "../../components/chart/RadialChart";
 /* ui */
 import {ReactComponent as EnergyIcon} from "../../assets/icons/energy.svg";
 import {ReactComponent as EllipseShape} from "../../assets/sprites/ellipse.svg";
+/* types */
+import {FoodRecord} from "../../services";
 
 interface RadialCaloriesMonitorProps {
-	data: any;
+	data: FoodRecord["nutrient"];
 }
 
 const RadialCaloriesMonitor: React.FC<RadialCaloriesMonitorProps> = ({data}) => {
@@ -30,7 +32,7 @@ const RadialCaloriesMonitor: React.FC<RadialCaloriesMonitorProps> = ({data}) => 
 				<div className="absolute w-full h-full">
 					<RadialChart data={data} />
 					<div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pt-5">
-						<p className="calories-value font-poppins text-center text-4xl 2xl:text-6xl text-white">1659</p>
+						<p className="calories-value font-poppins text-center text-4xl 2xl:text-6xl text-white">{Math.round(data.calories) ?? 0}</p>
 						<p className="calories-unit font-poppins text-center text-sm 2xl:text-lg text-white">kcal</p>
 					</div>
 				</div>

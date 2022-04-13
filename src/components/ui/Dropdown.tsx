@@ -9,27 +9,58 @@
  * MIT License
  * Copyright (c) 2021 Keena Levine
  */
+import {useState} from "react";
 /* component */
 import Button from "./Button";
 /* hook */
 import useOuterClick from "../../hook/useOuterClick";
+/* util */
+import {datesBetween} from "../../utils/common";
 
 interface DropdownProps {
 	icon?: React.ReactNode;
-	isDropdownActive: boolean;
-	onToggleDropdown: (isActive: boolean) => void;
+	options: any[];
+	onItemClicked: (dates: string[]) => void;
 }
 
-const Dropdown: React.FC<DropdownProps> = ({children, icon, isDropdownActive, onToggleDropdown}) => {
-	const ref = useOuterClick<HTMLDivElement>(() => onToggleDropdown(false));
+const Dropdown: React.FC<DropdownProps> = ({options, icon, onItemClicked}) => {
+	const [label, setLabel] = useState("Last Week");
+	const [toggleDropdown, setToggleDropdown] = useState(false);
 
-	const handleToggle = () => onToggleDropdown(!isDropdownActive);
+	const ref = useOuterClick<HTMLDivElement>(() => setToggleDropdown(false));
+
+	const handleToggle = () => setToggleDropdown(!toggleDropdown);
+
+	const handleDropdownItemClicked = (label: string, dates: string[]) => {
+		onItemClicked(dates);
+		setLabel(label);
+	};
+
+	const renderedDropdownItem = options.map((item, index) => (
+		<DropdownItem key={index} label={item.label} onClick={() => handleDropdownItemClicked(item.label, datesBetween(item.daysAgo, item.daysLater))} />
+	));
 
 	return (
 		<div ref={ref} className="dropdown relative">
-			<Button className="bg-medium-slate-blue hover:bg-purple-500 py-3 px-6 2xl:py-5 2xl:px-10 2xl:text-3xl inline-flex" icon={icon} text="Last Week" onClick={handleToggle} />
-			{isDropdownActive && <div className="dropdown-list bg-purple-900 h-auto absolute top-full inset-x-0 flex flex-col space-y-2 2xl:space-y-5 mt-2 rounded-lg p-2.5 shadow-2xl">{children}</div>}
+			<Button className="bg-medium-slate-blue hover:bg-purple-500 py-3 px-6 2xl:py-5 2xl:px-10 2xl:text-3xl inline-flex" icon={icon} text={label} onClick={handleToggle} />
+			{/* {toggleDropdown && <div className="dropdown-list bg-purple-900 h-auto absolute top-full inset-x-0 flex flex-col space-y-2 2xl:space-y-5 mt-2 rounded-lg p-2.5 shadow-2xl">{children}</div>} */}
+			{toggleDropdown && (
+				<div className="dropdown-list bg-purple-900 h-auto absolute top-full inset-x-0 flex flex-col space-y-2 2xl:space-y-5 mt-2 rounded-lg p-2.5 shadow-2xl">{renderedDropdownItem}</div>
+			)}
 		</div>
+	);
+};
+
+interface DropdownItemProps {
+	label: string;
+	onClick?: React.MouseEventHandler<HTMLButtonElement> | undefined;
+}
+
+const DropdownItem: React.FC<DropdownItemProps> = ({label, onClick}) => {
+	return (
+		<button className="hover:bg-purple-500 py-3 px-5 2xl:text-3xl font-poppins text-white rounded-2xl items-center" onClick={onClick}>
+			{label}
+		</button>
 	);
 };
 
