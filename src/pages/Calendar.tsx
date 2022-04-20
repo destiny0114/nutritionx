@@ -13,13 +13,17 @@
 import UserCalendar from "../layout/calendar/UserCalendar";
 import DisplayFoodRecord from "../layout/calendar/DisplayFoodRecord";
 import Search from "../layout/calendar/Search";
-import FoodList from "../layout/calendar/FoodList";
+import FoodList from "../layout/calendar/DisplayFoodList";
 /* hook */
 import useSearch from "../hook/useSearch";
 import useFoodRecord from "../hook/useFoodRecord";
+import {useTypedSelector} from "../hook/useTypedSelector";
 
 const Calendar: React.FC<{}> = () => {
-	const [onDateSelect, onAddFoodRecord] = useFoodRecord();
+	const recordList = useTypedSelector(({userState}) => userState.data.records);
+	const foodList = useTypedSelector(({foodState: {data}}) => data.items);
+
+	const [onDateSelect, onAddFoodRecord, foodRecordByDate] = useFoodRecord(recordList);
 	const [onTermSubmit] = useSearch("", 275);
 
 	return (
@@ -30,7 +34,7 @@ const Calendar: React.FC<{}> = () => {
 						<UserCalendar onDateSelect={onDateSelect} />
 					</div>
 					<div className="flex-auto overflow-hidden p-5 bg-medium-slate-blue shadow-lg rounded-2xl">
-						<DisplayFoodRecord />
+						<DisplayFoodRecord foodRecordSelected={foodRecordByDate} />
 					</div>
 				</div>
 			</div>
@@ -41,7 +45,7 @@ const Calendar: React.FC<{}> = () => {
 					</div>
 					<div className="flex-auto overflow-hidden">
 						<div className="relative w-full h-full bg-light-purple border-medium-slate-blue border-2 shadow-lg rounded-2xl p-5">
-							<FoodList onAddFoodRecord={onAddFoodRecord} />
+							<FoodList foodList={foodList} onAddFoodRecord={onAddFoodRecord} />
 						</div>
 					</div>
 				</div>

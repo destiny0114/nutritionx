@@ -10,7 +10,7 @@
  * Copyright (c) 2021 Keena Levine
  */
 /* UI */
-import React from "react";
+import React, {useMemo} from "react";
 import {ReactComponent as AddIcon} from "../../../assets/icons/add.svg";
 /* types */
 import {Food} from "../../../services";
@@ -25,18 +25,19 @@ interface FoodItemProps {
 const FoodItem: React.FC<FoodItemProps> = ({food, onAddFoodRecord}) => {
 	const {food_name, photo, serving_qty, serving_weight_grams, full_nutrients} = food;
 
-	if (!full_nutrients) return null;
-
-	const calories = findNutrientById(full_nutrients, 208, (data) => {
-		if (data) return `${Math.round(data.value).toString()} kcal`;
-		return "Unknown";
-	});
-
-	console.log(food_name);
+	const calories = useMemo(
+		() =>
+			findNutrientById(full_nutrients, 208, (data) => {
+				if (data) return `${Math.round(data.value).toString()} kcal`;
+				return "Unknown";
+			}),
+		[full_nutrients]
+	);
 
 	const onButtonClicked = () => {
 		onAddFoodRecord(food);
 	};
+	if (!full_nutrients) return null;
 
 	return (
 		<div className="bg-purple-300 shadow-xl rounded-2xl w-full h-auto inline-flex items-center px-4 py-2">
@@ -54,4 +55,4 @@ const FoodItem: React.FC<FoodItemProps> = ({food, onAddFoodRecord}) => {
 	);
 };
 
-export default React.memo(FoodItem);
+export default FoodItem;

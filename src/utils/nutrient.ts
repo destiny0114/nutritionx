@@ -9,12 +9,13 @@
  * MIT License
  * Copyright (c) 2022 Keena Levine
  */
-import {Food, FoodRecord, RecordCollection, Status} from "../services";
-import {dateFormat, weekDates} from "./common";
+import {Food, FoodNutrient, FoodRecord, FoodSelect, MAIN_NUTRIENTS, RecordCollection, Status} from "../services";
+/* types */
+import {dateFormat, splitArray, weekDates} from "./common";
 
-type NutrientList = Pick<Food["full_nutrients"][number], "attr_id" | "value">[];
+type NutrientInfo = Pick<FoodNutrient, "attr_id" | "value">;
 
-export function findNutrientById(nutrientList: NutrientList, attr_id: number, formatter: (nutrient: {attr_id: number; value: number} | undefined) => string | number) {
+export function findNutrientById(nutrientList: NutrientInfo[], attr_id: number, formatter: (nutrient: NutrientInfo | undefined) => string | number) {
 	if (typeof nutrientList === undefined || !nutrientList.length) return;
 
 	const nutrient = nutrientList.find((item) => item.attr_id === attr_id);
@@ -22,45 +23,43 @@ export function findNutrientById(nutrientList: NutrientList, attr_id: number, fo
 	return formatter(nutrient);
 }
 
-export function filterRecordByWeek(records: RecordCollection, from: string, to: string) {
-	const fromStrParts = Array.from(from.split("/"), Number);
-	const toStrParts = Array.from(to.split("/"), Number);
-	const fromDate = new Date(fromStrParts[2], fromStrParts[1] - 1, fromStrParts[0]);
-	const toDate = new Date(toStrParts[2], toStrParts[1] - 1, toStrParts[0]);
-	const isSevenDaysOld = function (dates: string) {
-		let newDates = Array.from(dates.split("/"), Number);
-		let recordDate = new Date(newDates[2], newDates[1] - 1, newDates[0]);
-		return recordDate.getTime() >= fromDate.getTime() && recordDate.getTime() <= toDate.getTime();
-	};
-	return Object.keys(records).filter(isSevenDaysOld);
+export function fillterFoodInfo(food: Food) {
+	const {food_name, serving_unit, serving_qty, serving_weight_grams, full_nutrients, photo} = food;
+	const filteredNutrients = full_nutrients.filter((nutrient) => MAIN_NUTRIENTS.some((match) => match.attr_id === nutrient.attr_id));
+	const nutrients = MAIN_NUTRIENTS.map((item) => ({...item, ...filteredNutrients.find((nutrient) => nutrient.attr_id === item.attr_id)}));
+	const [primary, common] = splitArray(nutrients, (index) => index < 11);
+
+	return {
+		food_name,
+		serving_unit,
+		serving_qty,
+		serving_weight_grams,
+		photo,
+		full_nutrients: {
+			primary,
+			common,
+		},
+	} as FoodSelect;
 }
 
-export function getTotalNutrientConsumeByEachDay(weekDates: Date[], records: RecordCollection) {
-	return weekDates.map((d) => {
-		if (records[dateFormat(d)]) {
-			const totalNutrientByDay = getTotalNutrientByDay(records, dateFormat(d));
-			console.log(totalNutrientByDay);
-
-			return {
-				date: d.toLocaleString("en-us", {month: "short", day: "numeric"}),
-				nutrient_consume: totalNutrientByDay,
-			};
-		}
-		return {
-			date: d.toLocaleString("en-us", {month: "short", day: "numeric"}),
-			nutrient_consume: {
-				calories: 0,
-				carbs: 0,
-				proteins: 0,
-				fats: 0,
+export function filterFoodNutrientList(full_nutrients: NutrientInfo[], targetIds: number[]) {
+	const result = full_nutrients
+		.filter((item) => targetIds.indexOf(Number(item.attr_id)) !== -1)
+		.reduce(
+			(acc, item) => {
+				acc[Number(item.attr_id)] = item;
+				return acc;
 			},
-		};
-	});
+			{} as {
+				[key: number]: NutrientInfo;
+			}
+		);
+
+	return result;
 }
 
-export function getTotalNutrientByDay(records: RecordCollection, dateIndex: string) {
-	const recordItems = records[dateIndex].items;
-	const sumRecordNutrient = recordItems.reduce((prev, next) => {
+export function getTotalNutrientByDay(foodRecordList: FoodRecord[]) {
+	const sumRecordNutrient = foodRecordList.reduce((prev, next) => {
 		if (!Object.keys(prev).length) return next;
 
 		const average_calories = Math.round(prev.nutrient.calories + next.nutrient.calories);
@@ -81,24 +80,29 @@ export function getTotalNutrientByDay(records: RecordCollection, dateIndex: stri
 	return sumRecordNutrient.nutrient;
 }
 
-export function getWeekRecordBetweenDate(records: RecordCollection, datesBetween: string[]) {
-	const [from, to] = datesBetween;
-	const filteredRecordDates = filterRecordByWeek(records, from, to);
-	const weekRecord = filteredRecordDates.reduce((acc, curr) => {
-		acc[curr] = records[curr];
-		return acc;
-	}, {} as RecordCollection);
-	const result = weekDates(from, to).map((d) => {
-		if (weekRecord[dateFormat(d)]) {
-			const totalNutrientByDay = getTotalNutrientByDay(weekRecord, dateFormat(d));
+export function filterRecordByWeek(records: RecordCollection, from: string, to: string) {
+	const fromDate = new Date(from);
+	const toDate = new Date(to);
+
+	const isSevenDaysOld = (day: string) => {
+		let recordDate = new Date(day);
+		return recordDate.getTime() >= fromDate.getTime() && recordDate.getTime() <= toDate.getTime();
+	};
+	return Object.keys(records).filter(isSevenDaysOld);
+}
+
+export function getTotaNutrientConsumeByEachDay(weekDates: Date[], weekRecords: RecordCollection) {
+	return weekDates.map((dayDate) => {
+		if (weekRecords[dateFormat(dayDate)]) {
+			const totalNutrientByDay = getTotalNutrientByDay(weekRecords[dateFormat(dayDate)].items);
 
 			return {
-				date: d.toLocaleString("en-us", {month: "short", day: "numeric"}),
+				date: dayDate.toLocaleString("en-us", {month: "short", day: "numeric"}),
 				nutrient_consume: totalNutrientByDay,
 			};
 		}
 		return {
-			date: d.toLocaleString("en-us", {month: "short", day: "numeric"}),
+			date: dayDate.toLocaleString("en-us", {month: "short", day: "numeric"}),
 			nutrient_consume: {
 				calories: 0,
 				carbs: 0,
@@ -107,6 +111,17 @@ export function getWeekRecordBetweenDate(records: RecordCollection, datesBetween
 			},
 		};
 	});
+}
+
+export function getWeekRecordBetweenDate(records: RecordCollection, datesBetween: string[]) {
+	const [from, to] = datesBetween;
+	const filteredRecordDates = filterRecordByWeek(records, from, to);
+	const weekRecord = filteredRecordDates.reduce((acc, curr) => {
+		acc[curr] = records[curr];
+		return acc;
+	}, {} as RecordCollection);
+
+	const result = getTotaNutrientConsumeByEachDay(weekDates(from, to), weekRecord);
 	return result as Status[];
 }
 

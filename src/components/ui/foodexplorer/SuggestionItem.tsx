@@ -10,26 +10,24 @@
  * Copyright (c) 2022 Keena Levine
  */
 import React from "react";
-/* hook */
-import useAction from "../../../hook/useAction";
 /* redux */
-import {Food} from "../../../services";
+import {Food, FoodSelect} from "../../../services";
 /* utils */
-import {findNutrientById} from "../../../utils/nutrient";
+import {fillterFoodInfo, findNutrientById} from "../../../utils/nutrient";
 
 interface SuggestionItemProps {
 	food: Food;
 	onToggleSuggestions: (open: boolean) => void;
+	onFoodSelect: (foodChoosed: FoodSelect) => void;
 }
 
-const SuggestionItem: React.FC<SuggestionItemProps> = ({food, onToggleSuggestions}) => {
+const SuggestionItem: React.FC<SuggestionItemProps> = ({food, onToggleSuggestions, onFoodSelect}) => {
 	const {food_name, photo, serving_unit, serving_qty, serving_weight_grams, full_nutrients} = food;
-	const {selectFood} = useAction();
 
 	if (!full_nutrients) return null;
 
 	const onButtonClicked = () => {
-		selectFood(food);
+		onFoodSelect(fillterFoodInfo(food));
 		onToggleSuggestions(false);
 	};
 

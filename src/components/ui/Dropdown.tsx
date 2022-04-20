@@ -34,6 +34,7 @@ const Dropdown: React.FC<DropdownProps> = ({options, icon, onItemClicked}) => {
 	const handleDropdownItemClicked = (label: string, dates: string[]) => {
 		onItemClicked(dates);
 		setLabel(label);
+		setToggleDropdown(false);
 	};
 
 	const renderedDropdownItem = options.map((item, index) => (
@@ -43,7 +44,6 @@ const Dropdown: React.FC<DropdownProps> = ({options, icon, onItemClicked}) => {
 	return (
 		<div ref={ref} className="dropdown relative">
 			<Button className="bg-medium-slate-blue hover:bg-purple-500 py-3 px-6 2xl:py-5 2xl:px-10 2xl:text-3xl inline-flex" icon={icon} text={label} onClick={handleToggle} />
-			{/* {toggleDropdown && <div className="dropdown-list bg-purple-900 h-auto absolute top-full inset-x-0 flex flex-col space-y-2 2xl:space-y-5 mt-2 rounded-lg p-2.5 shadow-2xl">{children}</div>} */}
 			{toggleDropdown && (
 				<div className="dropdown-list bg-purple-900 h-auto absolute top-full inset-x-0 flex flex-col space-y-2 2xl:space-y-5 mt-2 rounded-lg p-2.5 shadow-2xl">{renderedDropdownItem}</div>
 			)}

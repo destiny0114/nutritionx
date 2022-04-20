@@ -9,22 +9,18 @@
  * MIT License
  * Copyright (c) 2021 Keena Levine
  */
-import React, {useCallback, useEffect, useMemo} from "react";
+import React from "react";
 /* components */
 import FoodItem from "../../components/ui/foodlist/FoodItem";
 /* types */
 import {Food} from "../../services";
-/* hook */
-import {useTypedSelector} from "../../hook/useTypedSelector";
-import useAction from "../../hook/useAction";
 
 interface FoodListProps {
+	foodList: Food[];
 	onAddFoodRecord: (food: Food) => void;
 }
 
-const FoodList: React.FC<FoodListProps> = ({onAddFoodRecord}) => {
-	const foodList = useTypedSelector(({foodState: {data}}) => data.items);
-
+const DisplayFoodList: React.FC<FoodListProps> = ({foodList, onAddFoodRecord}) => {
 	if (typeof foodList === undefined || !foodList.length) return <p className="absolute inset-0 flex items-center justify-center font-poppins font-medium text-2xl opacity-40">Try Search a Food</p>;
 
 	const renderedFoodList = foodList.map((food, index) => <FoodItem food={food} key={index} onAddFoodRecord={onAddFoodRecord} />);
@@ -36,6 +32,4 @@ const FoodList: React.FC<FoodListProps> = ({onAddFoodRecord}) => {
 	);
 };
 
-const MemoizeFoodList = React.memo(FoodList);
-
-export default MemoizeFoodList;
+export default DisplayFoodList;

@@ -9,25 +9,12 @@
  * MIT License
  * Copyright (c) 2022 Keena Levine
  */
-import {createStore, applyMiddleware, compose, CombinedState} from "redux";
+import {createStore, applyMiddleware, compose} from "redux";
 import thunk from "redux-thunk";
 /* reducers */
 import reducers from "./reducers";
 /* middleware */
 import {persistMiddleware} from "./middlewares/persist-middleware";
-
-interface Test {
-	date: string;
-	items: {
-		food_name: string;
-		nutrient: {
-			calories: number;
-			carbs: number;
-			proteins: number;
-			fats: number;
-		};
-	}[];
-}
 
 const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const enchancer = composeEnhancers(applyMiddleware(thunk, persistMiddleware));

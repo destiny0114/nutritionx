@@ -14,8 +14,8 @@ import axios, {AxiosRequestConfig} from "axios";
 const config: AxiosRequestConfig = {
 	baseURL: "https://trackapi.nutritionix.com/v2/",
 	headers: {
-		"x-app-id": process.env.REACT_APP_APP_ID as string,
-		"x-app-key": process.env.REACT_APP_APP_KEY as string,
+		"x-app-id": String(process.env.NUTRITIONX_APP_ID),
+		"x-app-key": String(process.env.NUTRITIONX_APP_KEY),
 	},
 	responseType: "json",
 };

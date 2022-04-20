@@ -9,6 +9,7 @@
  * MIT License
  * Copyright (c) 2021 Keena Levine
  */
+import {useCallback, useState} from "react";
 /* component */
 import AutoComplete from "../../components/ui/foodexplorer/AutoComplete";
 import FoodView from "../../components/ui/foodexplorer/FoodView";
@@ -16,23 +17,27 @@ import FoodView from "../../components/ui/foodexplorer/FoodView";
 import useSearch from "../../hook/useSearch";
 import useOuterClick from "../../hook/useOuterClick";
 import {useTypedSelector} from "../../hook/useTypedSelector";
+import {FoodSelect} from "../../services";
 
 const FoodExplorer: React.FC = () => {
-	const {foodState, userState} = useTypedSelector((state) => state);
+	const [foodSelected, setFoodSelected] = useState<FoodSelect | null>(null);
+	const {foodState} = useTypedSelector((state) => state);
+
 	const [onTermSubmit, openSuggestions, onToggleSuggestions] = useSearch("", 275);
 	const ref = useOuterClick<HTMLDivElement>(() => onToggleSuggestions(false));
 
 	const searchResults = foodState.data.items.slice(0, 5);
-	const currentFood = userState.foodSelected;
+
+	const handleFoodSelect = useCallback((foodChoosed: FoodSelect) => setFoodSelected(foodChoosed), []);
 
 	return (
 		<div className="flex space-y-4 w-full h-full flex-col">
 			<div ref={ref} className="flex-none h-12 2xl:h-16">
-				<AutoComplete searchResults={searchResults} onTermSubmit={onTermSubmit} openSuggestions={openSuggestions} onToggleSuggestions={onToggleSuggestions} />
+				<AutoComplete searchResults={searchResults} onTermSubmit={onTermSubmit} openSuggestions={openSuggestions} onToggleSuggestions={onToggleSuggestions} onFoodSelect={handleFoodSelect} />
 			</div>
 			<div className="flex-grow w-full h-full">
 				<div className="w-full h-full p-5 relative bg-light-purple border-medium-slate-blue border-2 shadow-lg rounded-2xl">
-					<FoodView foodSelected={currentFood} />
+					<FoodView foodSelected={foodSelected} />
 				</div>
 			</div>
 		</div>

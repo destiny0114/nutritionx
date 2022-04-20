@@ -11,76 +11,21 @@
  */
 import {Dispatch} from "redux";
 /* types */
-import {Food} from "../food";
-import {RecordCollection, FoodRecord} from "../record";
+import {RecordCollection, FoodRecord} from "../food";
 import {ActionTypes} from "../types";
 /* reducers */
 import {RootState} from "../reducers";
 /* actions */
-import {
-	SelectFoodAction,
-	SelectFoodRecordByDateAction,
-	AddFoodRecordAction,
-	SaveRecordCompleteAction,
-	SaveRecordFailAction,
-	UserAction,
-	LoadRecordsCompleteAction,
-	LoadRecordsFailAction,
-	RecordData,
-	SelectFoodRecordByWeekAction,
-} from "../actions";
+import {AddFoodRecordAction, SaveRecordCompleteAction, SaveRecordFailAction, UserAction, LoadRecordsCompleteAction, LoadRecordsFailAction, RecordData} from "../actions";
 /* util */
 import localDB from "../../utils/localDB";
-import {dateFormat, getDaysAgo} from "../../utils/common";
-import {filterRecordByWeek} from "../../utils/nutrient";
 
-export function selectFood(food: Food): SelectFoodAction {
-	return {
-		type: ActionTypes.SELECT_FOOD,
-		payload: food,
-	};
-}
-
-export function selectFoodRecordByDate(dateSelected: Date): SelectFoodRecordByDateAction {
-	return {
-		type: ActionTypes.SELECT_FOOD_RECORD_BY_DATE,
-		payload: dateFormat(dateSelected),
-	};
-}
-
-export function selectFoodRecordByWeek(datesSelected: string[], weekRecord: RecordCollection): SelectFoodRecordByWeekAction {
-	return {
-		type: ActionTypes.SELECT_FOOD_RECORD_BY_WEEK,
-		payload: {
-			dates: datesSelected,
-			data: weekRecord,
-		},
-	};
-}
-
-// export function loadFoodRecordByLastWeek() {
-// 	return (dispatch: Dispatch<UserAction>, getState: () => RootState) => {
-// 		const {userState} = getState();
-// 		const {records} = userState.data;
-// 		const from = getDaysAgo(7);
-// 		const to = getDaysAgo(0);
-
-// 		const filteredrRecordDates = filterRecordByWeek(records, from, to);
-// 		const result = filteredrRecordDates.reduce((acc, curr) => {
-// 			acc[curr] = records[curr];
-// 			return acc;
-// 		}, {} as RecordCollection);
-
-// 		dispatch(selectFoodRecordByWeek(from, to, result));
-// 	};
-// }
-
-export function addFoodRecord(record: FoodRecord, created_at: Date): AddFoodRecordAction {
+export function addFoodRecord(record: FoodRecord, created_at: string): AddFoodRecordAction {
 	return {
 		type: ActionTypes.ADD_FOOD_RECORD,
 		payload: {
 			food: record,
-			created_at: dateFormat(created_at),
+			created_at: created_at,
 		},
 	};
 }
@@ -98,10 +43,10 @@ export function saveRecordFail(err: string): SaveRecordFailAction {
 	};
 }
 
-export function saveRecord(dateSelected: Date) {
+export function saveRecord(dateSelected: string) {
 	return async (dispatch: Dispatch<UserAction>, getState: () => RootState) => {
 		const {userState} = getState();
-		const record = userState.data.records[dateFormat(dateSelected)];
+		const record = userState.data.records[dateSelected];
 
 		try {
 			await localDB.setItem(record.date, record);

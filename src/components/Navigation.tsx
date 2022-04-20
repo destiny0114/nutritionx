@@ -16,6 +16,7 @@ import {ReactComponent as LogoIcon} from "../assets/icons/logo.svg";
 import {ReactComponent as OverviewIcon} from "../assets/icons/overview.svg";
 import {ReactComponent as CalenderIcon} from "../assets/icons/calender.svg";
 import {ReactComponent as FoodIcon} from "../assets/icons/food.svg";
+/* hook */
 import useAction from "../hook/useAction";
 
 const Navigation: React.FC = () => {
@@ -23,6 +24,7 @@ const Navigation: React.FC = () => {
 
 	useEffect(() => {
 		loadRecords();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (

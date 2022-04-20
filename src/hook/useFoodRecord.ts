@@ -13,23 +13,34 @@ import {useCallback, useEffect, useState} from "react";
 /* hook */
 import useAction from "./useAction";
 /* types */
-import {Food, FoodRecord} from "../services";
+import {Food, FoodRecord, RecordCollection} from "../services";
+/* utils */
+import {filterFoodNutrientList} from "../utils/nutrient";
+import {dateFormat} from "../utils/common";
 
-export default function useFoodRecord(): [onDateSelect: (dateSelected: Date) => void, onAddFoodRecord: (foodSelected: Food) => void] {
-	const [dateRecordSelected, setDateRecordSelected] = useState(new Date());
-	const {addFoodRecord, selectFoodRecordByDate, saveRecord} = useAction();
+export default function useFoodRecord(
+	recordList: RecordCollection
+): [onDateSelect: (dateSelected: string) => void, onAddFoodRecord: (foodSelected: Food) => void, foodRecordList: FoodRecord[] | null] {
+	const [dateRecordSelected, setDateRecordSelected] = useState(dateFormat(new Date()));
+	const [foodRecord, setFoodRecord] = useState<FoodRecord[] | null>(null);
+	const {addFoodRecord, saveRecord} = useAction();
 
 	useEffect(() => {
-		selectFoodRecordByDate(dateRecordSelected);
-	}, [dateRecordSelected, selectFoodRecordByDate]);
+		if (recordList[dateRecordSelected]) {
+			setFoodRecord(recordList[dateRecordSelected].items);
+		} else {
+			setFoodRecord([]);
+		}
+	}, [dateRecordSelected, recordList]);
 
-	const dateSelectHandler = useCallback((dateSelected: Date) => {
+	const dateSelectHandler = useCallback((dateSelected: string) => {
 		setDateRecordSelected(dateSelected);
 	}, []);
 
 	const addFoodHandler = useCallback(
 		(foodSelected: Food) => {
-			const mainNutrients = computeFoodNutrientList(foodSelected.full_nutrients);
+			const mainNutrients = filterFoodNutrientList(foodSelected.full_nutrients, [208, 204, 203, 205]);
+			console.log(dateRecordSelected);
 
 			const newFoodRecord: FoodRecord = {
 				food_name: foodSelected.food_name,
@@ -47,28 +58,5 @@ export default function useFoodRecord(): [onDateSelect: (dateSelected: Date) => 
 		[addFoodRecord, dateRecordSelected, saveRecord]
 	);
 
-	return [dateSelectHandler, addFoodHandler];
-}
-
-function computeFoodNutrientList(
-	full_nutrients: {
-		attr_id: number;
-		value: number;
-	}[]
-) {
-	const nutrientIds = [208, 204, 203, 205];
-
-	const result = full_nutrients
-		.filter((item) => nutrientIds.indexOf(item.attr_id) !== -1)
-		.reduce(
-			(acc, item) => {
-				acc[item.attr_id] = item;
-				return acc;
-			},
-			{} as {
-				[key: number]: {attr_id: number; value: number};
-			}
-		);
-
-	return result;
+	return [dateSelectHandler, addFoodHandler, foodRecord];
 }

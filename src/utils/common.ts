@@ -10,6 +10,7 @@
  * Copyright (c) 2022 Keena Levine
  */
 /* eslint-disable @typescript-eslint/no-array-constructor */
+import dayjs from "dayjs";
 
 export function classNames(...classes: (false | null | undefined | string)[]) {
 	return classes.filter(Boolean).join(" ");
@@ -36,71 +37,34 @@ export function capitalize(input: string) {
 	return input.charAt(0).toUpperCase() + input.slice(1);
 }
 
-export function dateFormat(inputDate: Date) {
-	const today = inputDate;
-	const yyyy = today.getFullYear();
-	let mm = String(today.getMonth() + 1).padStart(2, "0");
-	let dd = String(today.getDate()).padStart(2, "0");
-
-	return dd + "/" + mm + "/" + yyyy;
+export function dateFormat(inputDate: Date | string) {
+	return dayjs(inputDate).format("YYYY-MM-DD");
 }
 
 export function sameDay(date1: string, date2: string) {
 	return date1 === date2;
 }
 
-export function daysDiffrence(date1: Date, date2: Date) {
-	const diff = Math.abs(date1.getTime() - date2.getTime());
-	const diffDays = Math.ceil(diff / (1000 * 3600 * 24));
-	return diffDays;
-}
-
-export function weeksDifference(date1: Date, date2: Date) {
-	return Math.floor((date1.getTime() - date2.getTime()) / (24 * 3600 * 1000 * 7));
-}
-
-export function getDaysbyWeek(weekAgo: number) {
-	const daysOfWeek = 7;
-
-	let weekDays: Date[] = new Array();
-	let day: Date;
-	let currentDate = new Date();
-
-	currentDate.setDate(currentDate.getDate() - weekAgo * daysOfWeek);
-	for (let i = 0; i < daysOfWeek; i++) {
-		currentDate.setDate(currentDate.getDate() + 1);
-		day = new Date(currentDate);
-		weekDays.push(day);
-	}
-	return weekDays;
+export function daysDiffrence(date1: string, date2: string) {
+	return dayjs(date2).diff(date1, "days");
 }
 
 export function weekDates(from: string, to: string) {
-	const fromStrParts = Array.from(from.split("/"), Number);
-	const toStrParts = Array.from(to.split("/"), Number);
-	const fromDate = new Date(fromStrParts[2], fromStrParts[1] - 1, fromStrParts[0]);
-	const toDate = new Date(toStrParts[2], toStrParts[1] - 1, toStrParts[0]);
-	console.log(fromDate);
-	console.log(toDate);
-
-	const diffDays = daysDiffrence(fromDate, toDate);
+	const diffDays = daysDiffrence(from, to);
 
 	let datesArray: Date[] = new Array();
 	let day: Date;
-	let currentDate = fromDate;
+	let currentDate = dayjs(from);
 
 	for (let i = 0; i < diffDays; i++) {
-		currentDate.setDate(currentDate.getDate() + 1);
-		day = new Date(currentDate);
+		day = currentDate.add(i + 1, "day").toDate();
 		datesArray.push(day);
 	}
 	return datesArray;
 }
 
 export function getDaysAgo(numOfDays: number) {
-	const start = new Date();
-	start.setTime(start.getTime() - 3600 * 1000 * 24 * numOfDays);
-	return dateFormat(start);
+	return dateFormat(dayjs().subtract(numOfDays, "day").toDate());
 }
 
 export function datesBetween(daysAgo: number, daysLater: number) {

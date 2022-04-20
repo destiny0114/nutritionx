@@ -35,7 +35,7 @@ const AverageNutritions: React.FC<AverageNutritionsProps> = ({totalAvgNutrition}
 				{icons[0]}
 				<p className="title font-poppins text-white text-center break-word text-sm mt-6 mb-2 2xl:text-xl">Avg Calories</p>
 				<p className="value font-poppins text-white text-center text-4xl 2xl:text-5xl">
-					{Math.round(totalAvgNutrition.calories / 7) ?? 0}
+					{(totalAvgNutrition && Math.round(totalAvgNutrition.calories / 7)) ?? 0}
 					<span className="unit font-poppins text-white text-center text-sm 2xl:text-lg ml-1">g</span>
 				</p>
 			</div>
@@ -43,7 +43,7 @@ const AverageNutritions: React.FC<AverageNutritionsProps> = ({totalAvgNutrition}
 				{icons[1]}
 				<p className="title font-poppins text-white text-center break-word text-sm mt-6 mb-2 2xl:text-xl">Avg Carbs</p>
 				<p className="value font-poppins text-white text-center text-4xl 2xl:text-5xl">
-					{Math.round(totalAvgNutrition.carbs / 7) ?? 0}
+					{(totalAvgNutrition && Math.round(totalAvgNutrition.carbs / 7)) ?? 0}
 					<span className="unit font-poppins text-white text-center text-sm 2xl:text-lg ml-1">g</span>
 				</p>
 			</div>
@@ -51,7 +51,7 @@ const AverageNutritions: React.FC<AverageNutritionsProps> = ({totalAvgNutrition}
 				{icons[2]}
 				<p className="title font-poppins text-white text-center break-word text-sm mt-6 mb-2 2xl:text-xl">Avg Proteins</p>
 				<p className="value font-poppins text-white text-center text-4xl 2xl:text-5xl">
-					{Math.round(totalAvgNutrition.proteins / 7) ?? 0}
+					{(totalAvgNutrition && Math.round(totalAvgNutrition.proteins / 7)) ?? 0}
 					<span className="unit font-poppins text-white text-center text-sm 2xl:text-lg ml-1">g</span>
 				</p>
 			</div>
@@ -59,7 +59,7 @@ const AverageNutritions: React.FC<AverageNutritionsProps> = ({totalAvgNutrition}
 				{icons[3]}
 				<p className="title font-poppins text-white text-center break-word text-sm mt-6 mb-2 2xl:text-xl">Avg Fats</p>
 				<p className="value font-poppins text-white text-center text-4xl 2xl:text-5xl">
-					{Math.round(totalAvgNutrition.fats / 7) ?? 0}
+					{(totalAvgNutrition && Math.round(totalAvgNutrition.fats / 7)) ?? 0}
 					<span className="unit font-poppins text-white text-center text-sm 2xl:text-lg ml-1">g</span>
 				</p>
 			</div>

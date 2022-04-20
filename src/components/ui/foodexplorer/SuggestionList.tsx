@@ -13,17 +13,18 @@ import React from "react";
 /* component */
 import SuggestionItem from "./SuggestionItem";
 /* type */
-import {Food} from "../../../services";
+import {Food, FoodSelect} from "../../../services";
 
 interface SuggestionListProps {
 	suggestions: Food[];
 	openSuggestions: boolean;
 	onToggleSuggestions: (open: boolean) => void;
+	onFoodSelect: (foodChoosed: FoodSelect) => void;
 }
 
-const SuggestionList: React.FC<SuggestionListProps> = ({suggestions, onToggleSuggestions, openSuggestions}) => {
+const SuggestionList: React.FC<SuggestionListProps> = ({suggestions, onToggleSuggestions, openSuggestions, onFoodSelect}) => {
 	const renderedSuggestions = suggestions.map((food, index) => {
-		return <SuggestionItem key={index} food={food} onToggleSuggestions={onToggleSuggestions} />;
+		return <SuggestionItem key={index} food={food} onToggleSuggestions={onToggleSuggestions} onFoodSelect={onFoodSelect} />;
 	});
 
 	if (!openSuggestions) return null;
@@ -35,4 +36,4 @@ const SuggestionList: React.FC<SuggestionListProps> = ({suggestions, onToggleSug
 	);
 };
 
-export default SuggestionList;
+export default React.memo(SuggestionList);

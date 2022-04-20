@@ -10,27 +10,8 @@
  * Copyright (c) 2022 Keena Levine
  */
 /* types */
-import {Food} from "../food";
-import {RecordCollection, FoodRecord} from "../record";
+import {RecordCollection, FoodRecord} from "../food";
 import {ActionTypes} from "../types";
-
-export interface SelectFoodAction {
-	type: typeof ActionTypes.SELECT_FOOD;
-	payload: Food;
-}
-
-export interface SelectFoodRecordByDateAction {
-	type: typeof ActionTypes.SELECT_FOOD_RECORD_BY_DATE;
-	payload: string;
-}
-
-export interface SelectFoodRecordByWeekAction {
-	type: typeof ActionTypes.SELECT_FOOD_RECORD_BY_WEEK;
-	payload: {
-		dates: string[];
-		data: RecordCollection;
-	};
-}
 
 export interface AddFoodRecordAction {
 	type: typeof ActionTypes.ADD_FOOD_RECORD;
@@ -63,12 +44,4 @@ export interface LoadRecordsFailAction {
 	payload: string;
 }
 
-export type UserAction =
-	| SelectFoodAction
-	| SelectFoodRecordByWeekAction
-	| SelectFoodRecordByDateAction
-	| AddFoodRecordAction
-	| SaveRecordCompleteAction
-	| SaveRecordFailAction
-	| LoadRecordsCompleteAction
-	| LoadRecordsFailAction;
+export type UserAction = AddFoodRecordAction | SaveRecordCompleteAction | SaveRecordFailAction | LoadRecordsCompleteAction | LoadRecordsFailAction;

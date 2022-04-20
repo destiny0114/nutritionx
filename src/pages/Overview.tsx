@@ -46,7 +46,6 @@ const Overview: React.FC<{}> = () => {
 		if (datesSelected.length && sameDay(dates[0], datesSelected[0]) && sameDay(dates[1], datesSelected[1])) return;
 		setDatesSelected(dates);
 	};
-	console.log(todayRecord);
 
 	return (
 		<div className="overview flex w-full space-x-6 select-none">
