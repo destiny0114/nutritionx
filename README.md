@@ -61,17 +61,21 @@ REACT_APP_NUTRITIONX_APP_KEY=<x-app-key>
 ```
 
 5. This is our folder structure
+
+```
    .
    ├── public
-   ├── src  
-   ├── .gitignore  
-   ├── craco.config.js  
+   ├── src
+   ├── .gitignore
+   ├── craco.config.js
    ├── package.json
-   ├── tailwind.config.js  
+   ├── tailwind.config.js
    ├── tsconfig.json
    ├── .env
+   ├── yarn.lock
    ├── LICENSE
    └── README.md
+```
 
 For more, please refer their [documentation](https://developer.nutritionix.com/docs/v2).
 
@@ -98,6 +102,7 @@ View the website at: http://localhost:3000. Thats it!
 ### Contributors
 
 This project exists thanks to all the people who contribute.
+
 <a href="https://github.com/destiny0114/nutritionx/graphs/contributors">
 <img src="https://contrib.rocks/image?repo=destiny0114/nutritionx" />
 </a>
