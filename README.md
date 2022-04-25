@@ -14,6 +14,7 @@ That's it, im sure it was a great experience for myself!
 
 - [React](https://reactjs.org/)
 - [Create React App](https://create-react-app.dev/)
+- [React Router](https://reactrouter.com/)
 - [Redux](https://redux.js.org/)
 - [day.js](https://day.js.org/)
 - [axios](https://axios-http.com/)
@@ -21,6 +22,9 @@ That's it, im sure it was a great experience for myself!
 - [localforage](https://localforage.github.io/localForage/)
 - [immer](https://immerjs.github.io/immer/)
 - [craco](https://github.com/gsoft-inc/craco)
+- [lottie](https://lottiefiles.com/)
+- [Full Calendar](https://fullcalendar.io/)
+- [Recharts](https://recharts.org/en-US/)
 
 ## Installation
 
