@@ -110,3 +110,8 @@ This project exists thanks to all the people who contribute.
 <a href="https://github.com/destiny0114/nutritionx/graphs/contributors">
 <img src="https://contrib.rocks/image?repo=destiny0114/nutritionx" />
 </a>
+
+## License
+
+[MIT © Kenna Levine](./LICENSE)
+[Powered by Nutritionix](https://www.nutritionix.com/)
