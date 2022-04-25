@@ -114,3 +114,4 @@ This project exists thanks to all the people who contribute.
 ## License
 
 [MIT © Kenna Levine](./LICENSE)
+[Powered by Nutritionix](https://www.nutritionix.com/)
