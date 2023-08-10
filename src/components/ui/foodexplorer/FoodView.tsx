@@ -25,7 +25,7 @@ const FoodView: React.FC<FoodViewProps> = ({foodSelected}) => {
 	if (!foodSelected) return <LottieEmptyFood />;
 
 	return (
-		<div className="flex w-full space-x-4">
+		<div className="flex w-full p-5 space-x-4">
 			<div className="w-1/3 flex flex-col gap-4">
 				<FoodMainInfo food={foodSelected} />
 			</div>
