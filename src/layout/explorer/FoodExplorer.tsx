@@ -35,8 +35,8 @@ const FoodExplorer: React.FC = () => {
 			<div ref={ref} className="flex-none h-12 2xl:h-16">
 				<AutoComplete searchResults={searchResults} onTermSubmit={onTermSubmit} openSuggestions={openSuggestions} onToggleSuggestions={onToggleSuggestions} onFoodSelect={handleFoodSelect} />
 			</div>
-			<div className="flex-grow w-full h-full">
-				<div className="w-full h-full p-5 relative bg-light-purple border-medium-slate-blue border-2 shadow-lg rounded-2xl">
+			<div className="flex-grow w-full">
+				<div className="w-full min-h-full relative bg-light-purple border-medium-slate-blue border-2 shadow-lg rounded-2xl">
 					<FoodView foodSelected={foodSelected} />
 				</div>
 			</div>
