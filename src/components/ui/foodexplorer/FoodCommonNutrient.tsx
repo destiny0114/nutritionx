@@ -19,9 +19,9 @@ interface FoodCommonNutrientProps {
 
 const FoodCommonNutrient: React.FC<FoodCommonNutrientProps> = ({nutrients}) => {
 	const renderedCommonNutrients = nutrients.common.map((nutrient) => (
-		<div className="flex justify-between items-center mx-3 2xl:my-2.5" key={nutrient.name}>
-			<p className="font-poppins 2xl:text-2xl capitalize">{nutrient.name}</p>
-			<p className="font-poppins 2xl:text-2xl">
+		<div className="flex justify-between items-center mx-3" key={nutrient.name}>
+			<p className="font-poppins text-xl capitalize">{nutrient.name}</p>
+			<p className="font-poppins text-xl">
 				{Math.round(nutrient.value)} {nutrient.unit}
 			</p>
 		</div>
