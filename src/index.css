@@ -73,7 +73,7 @@ body {
 	grid-template-columns: 1fr 1fr;
 	grid-template-rows: repeat(12, auto);
 	grid-auto-flow: column;
-	gap: 1.4rem;
+	gap: 2rem;
 }
 
 .loader,
