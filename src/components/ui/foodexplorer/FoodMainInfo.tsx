@@ -19,9 +19,9 @@ interface FoodMainInfoProps {
 
 const FoodMainInfo: React.FC<FoodMainInfoProps> = ({food}) => {
 	const renderedMainInfo = food.full_nutrients.primary.map((nutrient) => (
-		<div className="flex justify-between mx-3 my-3 2xl:my-7" key={nutrient.name}>
-			<p className="font-poppins font-medium 2xl:text-3xl capitalize">{nutrient.name}</p>
-			<p className="font-poppins font-medium 2xl:text-3xl">
+		<div className="flex justify-between mx-3" key={nutrient.name}>
+			<p className="font-poppins font-medium text-2xl capitalize">{nutrient.name}</p>
+			<p className="font-poppins font-medium text-2xl">
 				{Math.round(nutrient.value)} {nutrient.unit}
 			</p>
 		</div>
